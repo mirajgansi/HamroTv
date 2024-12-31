@@ -1,0 +1,189 @@
+main {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+.container {
+    display: flex;
+    min-height: 100vh;
+    background: linear-gradient(to bottom,  #150016,#76007C);
+  
+}
+
+.Logo {
+    position: absolute;
+    top: 10px;
+    left: 55px;
+    cursor: pointer; 
+}
+
+.Logo img {
+    width: 260px; 
+    height: 150px;
+    
+}
+.Logo:hover{
+    transform: scale(1.1);
+}
+.login-container {
+    width: 400px; /* Reduced width */
+    max-width: 400px; /* Reduced max-width */
+    padding: 30px 10px;
+    margin-top:60%;
+    margin-left: 60%;
+    background: transparent;
+    border-radius: 8px;
+    text-align: center;
+    height: 600px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgb(255, 255, 255);
+}
+
+.login-container h1 {
+    font-size: 80px;
+    font-weight: bold;
+    margin-bottom: 0%;
+    color: #FFE0E6;
+}
+
+.login-container h2{
+    font-size: 14px;
+    font-weight: normal;
+    color: #FFE0E6;
+}
+
+.input-group {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group input {
+    width: 320px;
+    padding: 10px 10px 10px 40px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #B18B9A;
+}
+
+.input-group img {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+}
+
+.login-btn {
+    width: 364px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #574963;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #6E546C;
+}
+
+.others-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    color: #F0EDFF;
+}
+
+.others-text span {
+    margin-top: 15px;
+    padding: 0 10px;
+}
+
+.line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #F0EDFF;
+}
+
+.container {
+    text-align: center;
+}
+
+.alternative {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.google-btn {
+    justify-content: center;
+    width: 364px;
+    margin: 10px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: transparent;
+    border-style: solid;
+    border-color: #FFE0E6;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.google-btn:hover {
+    background-color: #d4ade2;
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+}
+
+.google-logo {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+.movies {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-20%, -50%);
+    height: 500px;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .poster-wrapper {
+    position: absolute;
+    transition: all 0.3s ease;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .poster-wrapper:nth-child(1) { transform: translateX(-50%) rotate(-10deg); }
+  .poster-wrapper:nth-child(2) { transform: translateX(-50%) rotate(0deg); }
+  .poster-wrapper:nth-child(3) { transform: translateX(-50%) rotate(10deg); }
+  
+  .poster-wrapper:hover {
+    z-index: 10;
+    transform: translateX(-50%) scale(1.05) rotate(0deg) !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .movie-poster {
+    width: 350px;
+    height: 500px;
+    border-radius: 8px;
+    border: 4px solid white;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
