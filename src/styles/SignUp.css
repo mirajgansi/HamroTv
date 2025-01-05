@@ -1,0 +1,78 @@
+Background Styling
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  display: flex;
+  background: linear-gradient(to bottom,  #150016,#76007C);
+
+  font-family: 'Arial', sans-serif;
+}
+
+.logo h1 {
+  font-size: 28px;
+  color: white;
+}
+
+.logo .highlight {
+  color: #8b5cf6;
+}
+
+/* Form Wrapper Styling */
+.form-wrapper {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 32px;
+  width: 320px;
+  text-align: center;
+}
+
+.profile-icon img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 16px;
+}
+
+/* Input Group Styling */
+
+.input-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  color: white;
+}
+input {
+  width: 100%;
+  border: none;
+  background: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+}
+
+/* Button Styling */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #8b5cf6;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background (0.3s);
+}
+
+.submit-btn:hover {
+  background: #6a3dcc;
+}

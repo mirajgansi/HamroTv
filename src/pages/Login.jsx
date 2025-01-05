@@ -1,22 +1,20 @@
-import React from 'react'
+import React from 'react';
 import '../styles/Login.css';
-import '../styles/Global.css';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-
   const posters = [
-   { id: 1, src:  require('../assets/avatar.jpg'), alt: 'Avatar movie poster' },
-    { id: 2, src: require('../assets/american.jpg'), alt: 'American Psycho movie poster' },  
-    { id: 3, src:  require('../assets/TheGood.jpg'), alt: 'The Good, The Bad, The Ugly movie poster' },
+    { id: 1, src: require('../assets/avatar.jpg'), alt: 'Avatar movie poster' },
+    { id: 2, src: require('../assets/american.jpg'), alt: 'American Psycho movie poster' },
+    { id: 3, src: require('../assets/TheGood.jpg'), alt: 'The Good, The Bad, The Ugly movie poster' },
   ];
+
   return (
-    
     <div className="container">
-      
-        <div className="Logo">
-          <img src={require('../icons/logo.png')} alt="HamroTv Logo" />;
-        </div>
-    
+      <div className="Logo">
+        <img src={require('../icons/logo.png')} alt="HamroTv Logo" />
+      </div>
+
       <main>
         <div className="login-container">
           <h1>Welcome</h1>
@@ -34,41 +32,42 @@ const Login = () => {
           </form>
           <div className="alternative-login">
             <div className="divider">
-            <span class="line"></span>
+              <span className="line"></span>
               <span>Login with other</span>
-              <span class="line"></span>
+              <span className="line"></span>
             </div>
             <button type="button" className="google-btn">
               <img src={require("../icons/google.png")} alt="Google logo" className="google-logo" />
               Login with Google
             </button>
-            <span aherf="" className="NewUser"> Create Account</span>
+            <Link to="/Signup">
+              <span className="new-user">Create Account</span>
+            </Link>
           </div>
         </div>
       </main>
-    
+
       <div className="movies">
-            {posters.map((poster, index) => (
-              <div
-                key={poster.id}
-                className="poster-wrapper"
-                style={{
-                  left: `${index * 120}px`,
-                  transform: `rotate(${-10 + index * 10}deg)`,
-                  zIndex: index,
-                }}
-              >
-                <img
-                  src={poster.src}
-                  alt={poster.alt}
-                  className="movie-poster"
-                />
-              </div>
-            ))}
+        {posters.map((poster, index) => (
+          <div
+            key={poster.id}
+            className="poster-wrapper"
+            style={{
+              left: `${index * 120}px`,
+              transform: `rotate(${-10 + index * 10}deg)`,
+              zIndex: index,
+            }}
+          >
+            <img
+              src={poster.src}
+              alt={poster.alt}
+              className="movie-poster"
+            />
           </div>
-       
+        ))}
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
