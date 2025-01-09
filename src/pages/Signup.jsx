@@ -14,13 +14,13 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <div className="logo">
-        <h1>H<span className="highlight">Tv</span></h1>
+        
       </div>
       <div className="form-wrapper">
-        <div className="profile-icon">
-          <img src={profileIcon} alt="Profile Icon" />
+        <div className="profile">
+        <h1>Welcome <span className="highlight"> <br />to the family! Begin your journey with us <br /> by signing up</span></h1>
+
         </div>
-        <h2 className="form-title">Profile</h2>
         <form className="signup-form" onSubmit={handleSubmit}>
           <div className="input-group">
             <img src={usernameIcon} alt="Username Icon" className="input-icon" />

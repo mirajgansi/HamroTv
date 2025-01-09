@@ -1,78 +1,108 @@
-Background Styling
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #150016, #76007C);
+
+}
+
 .signup-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  display: flex;
-  background: linear-gradient(to bottom,  #150016,#76007C);
-
   font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgb(255, 255, 255);
 }
 
-.logo h1 {
-  font-size: 28px;
-  color: white;
-}
-
-.logo .highlight {
-  color: #8b5cf6;
-}
 
 /* Form Wrapper Styling */
 .form-wrapper {
   background: rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgb(255, 255, 255);
   backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 32px;
-  width: 320px;
+  width: 25%;
   text-align: center;
 }
-
-.profile-icon img {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 16px;
+.profile h1 {
+  font-size: 28px;
+  color: #150016;
+  text-align: left; /* Align text to the left */
+  white-space: nowrap; /* Prevents the text from wrapping */
 }
 
-.form-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 16px;
+.profile .highlight {
+  font-weight: normal;
+  font-size: 16px;
+  color: #E3B6B1;
+  animation: typing 4s steps(30) 1s 1 normal both, blink 0.75s step-end infinite; 
 }
 
 /* Input Group Styling */
+.input-group {
+  position: relative;
+  width: 90%;
+  margin-bottom: 16px;
+  border: 1px solid #E3B6B1; 
+  border-radius: 8px;
+  padding: 10px;
+  background: #522C5D;
+}
 
 .input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  margin-right: 8px;
-  color: white;
+  color: #E3B6B1;
 }
+
+/* Input Field Styling */
 input {
   width: 100%;
-  border: none;
+  padding: 12px 12px 12px 40px; /* Adjust padding to accommodate icon */
   background: none;
   outline: none;
   color: white;
   font-size: 14px;
+  border: none;
+  border-radius: 8px;
 }
 
 /* Button Styling */
 .submit-btn {
-  width: 100%;
+  width: 50%;
   padding: 12px;
-  background: #8b5cf6;
+  background: #29104A;
   color: white;
   font-size: 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background (0.3s);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .submit-btn:hover {
-  background: #6a3dcc;
+  background: #8b5cf6;
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
 }

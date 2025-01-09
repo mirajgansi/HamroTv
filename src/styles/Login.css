@@ -1,3 +1,9 @@
+body{
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom,  #150016,#76007C);
+  color: white;
+}
 main {
     margin: 0;
     padding: 0;
