@@ -2,24 +2,24 @@
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
-  background-color: #240046;
+  background: linear-gradient(to bottom,  #150016,#76007C);
   color: white;
 }
 
 .app-container {
   display: flex;
+  flex-direction: row;
   height: 100vh;
 }
 
 /* Sidebar Styles */
 .sidebar {
   width: 60px;
-  background-color: #1a0033;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+
 }
 
 .sidebar ul {
@@ -28,7 +28,10 @@ body {
   margin: 0;
   width: 100%;
 }
-
+.sidebar ul li.active {
+  color: #ffcc00;
+  font-weight: bold;
+}
 .sidebar ul li {
   text-align: center;
   font-size: 24px;
@@ -52,26 +55,27 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
   padding: 20px;
+  overflow-x: hidden;
 }
 
 /* Banner Section */
 .banner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .banner-main {
-  flex: 3;
   position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
 }
 
 .banner-main img {
   width: 100%;
-  border-radius: 10px;
+  height: 100%;
+  object-fit: cover;
 }
 
 .banner-buttons {
@@ -81,20 +85,21 @@ body {
   display: flex;
   gap: 10px;
 }
-
 .banner-buttons button {
   background-color: #8e44ad;
-  color: white;
+  color: rgb(255, 252, 252);
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .banner-buttons button:hover {
-  background-color: #6c3483;
+  background-color: #29104A;
+  transform: scale(1.1);
+
 }
 
 .banner-side {
@@ -147,15 +152,25 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
+.movie-card img:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s, box-shadow 0.3s, border-radius 0.3s;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
 
 .movie-card p {
   margin-top: 10px;
   font-size: 16px;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 568px) {
   .banner {
     flex-direction: column;
   }
@@ -169,6 +184,13 @@ body {
   }
 
   .movie-card {
+    scroll-snap-align: start;
     flex: 0 0 120px;
+    width: 100%; 
+    height: 10px;
+  }
+  .carousel {
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
   }
 }

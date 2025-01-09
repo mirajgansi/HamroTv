@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Login.css';
-import { Link } from 'react-router-dom';
+
 
 const Login = () => {
   const posters = [
@@ -40,9 +40,9 @@ const Login = () => {
               <img src={require("../icons/google.png")} alt="Google logo" className="google-logo" />
               Login with Google
             </button>
-            <Link to="/Signup">
+       
               <span className="new-user">Create Account</span>
-            </Link>
+            
           </div>
         </div>
       </main>

@@ -3,9 +3,9 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faFire,
-  faClock,
-  faHeart,
+  faSearch,
+  faFilm,
+  faTv,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Sidebar.css";
@@ -14,6 +14,12 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <ul className="sidebar-menu">
+      <li>
+          <button className="sidebar-button">
+            <FontAwesomeIcon icon={faSearch} className="icon" />
+           
+          </button>
+        </li>
         <li>
           <button className="sidebar-button">
             <FontAwesomeIcon icon={faHome} className="icon" />
@@ -22,20 +28,15 @@ const Sidebar = () => {
         </li>
         <li>
           <button className="sidebar-button">
-            <FontAwesomeIcon icon={faClock} className="icon" />
+            <FontAwesomeIcon icon={faFilm} className="icon" />
            
           </button>
         </li>
+        
         <li>
           <button className="sidebar-button">
-            <FontAwesomeIcon icon={faFire} className="icon" />
+            <FontAwesomeIcon icon={faTv} className="icon" />
            
-          </button>
-        </li>
-        <li>
-          <button className="sidebar-button">
-            <FontAwesomeIcon icon={faHeart} className="icon" />
-            
           </button>
         </li>
         <li>
