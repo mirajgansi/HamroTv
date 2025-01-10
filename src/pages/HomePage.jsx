@@ -54,15 +54,16 @@ const HomePage = () => {
 
         {/* Banner Section */}
         <div className="banner">
-        
+        <div className="carousel">
           <div className="banner-main">
-         
+       
             {mainContent.map((movie) => (
               <div className="movie-card" key={movie.id}>
                 <img src={movie.thumbnail} alt={movie.title} />
         
               </div>
             ))}
+          </div>
           </div>
           <div className="banner-buttons"><button>Play</button>
           <button>Watch Trailer</button></div>
