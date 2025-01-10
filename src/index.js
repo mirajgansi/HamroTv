@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
-import HomePage from './pages/HomePage';
+import ProfileIcon from './components/ProfileIcon';
 
 
 
@@ -13,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
-   <HomePage />
+   <ProfileIcon />
   </React.StrictMode>
 );
 

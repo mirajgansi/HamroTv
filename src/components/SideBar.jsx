@@ -13,6 +13,10 @@ import "../styles/Sidebar.css";
 const Sidebar = () => {
   return (
     <div className="sidebar">
+      {/* <div className="logo">
+      <img src={require('../icons/logo.png')} alt="HamroTv Logo" />
+      </div>
+        */}
       <ul className="sidebar-menu">
       <li>
           <button className="sidebar-button">

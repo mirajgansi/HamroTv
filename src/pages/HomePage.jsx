@@ -54,13 +54,11 @@ const HomePage = () => {
 
         {/* Banner Section */}
         <div className="banner">
-        <div className="carousel">
           <div className="banner-main">
-       
+        <div className="carousel">
             {mainContent.map((movie) => (
               <div className="movie-card" key={movie.id}>
                 <img src={movie.thumbnail} alt={movie.title} />
-        
               </div>
             ))}
           </div>

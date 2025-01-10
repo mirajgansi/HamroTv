@@ -1,7 +1,10 @@
 .profile-icon-container {
-    position: relative;
+    position: fixed; /* Make it fixed on the screen */
+    top: 10px; /* Adjust the top distance */
+    right: 10px; /* Adjust the right distance */
     display: inline-block;
     cursor: pointer;
+    z-index: 1000; /* Ensure it stays on top */
   }
   
   .profile-icon {
