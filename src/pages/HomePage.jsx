@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HomePage.css"; 
 import Sidebar from "../components/SideBar.jsx";
-
+import ProfileIcon from "../components/ProfileIcon.jsx";
 // Import images from the assets folder
 import american from "../assets/american.jpg";
 import avatar from "../assets/avatar.jpg";
@@ -48,7 +48,10 @@ const HomePage = () => {
       <div className="sidebar">
         <Sidebar />
       </div>
-
+    {/* Profile Icon*/ }
+    <div className="profile-icon">
+      <ProfileIcon />
+    </div>
       {/* Main Content */}
       <div className="main-content">
 
