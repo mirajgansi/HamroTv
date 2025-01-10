@@ -60,7 +60,6 @@ const HomePage = () => {
             {mainContent.map((movie) => (
               <div className="movie-card" key={movie.id}>
                 <img src={movie.thumbnail} alt={movie.title} />
-                <p>{movie.title}</p>
         
               </div>
             ))}

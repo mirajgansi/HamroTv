@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Login.css';
-
+import './pages/sidebar.jsx';
 
 const Login = () => {
   const posters = [
