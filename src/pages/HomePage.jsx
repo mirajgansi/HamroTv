@@ -46,7 +46,7 @@ const HomePage = () => {
     <div className="app-container">
       {/* Sidebar */}
       <div className="sidebar">
-        <Sidebar />
+        <Sidebar  movies={useEffect} />
       </div>
     {/* Profile Icon*/ }
     <div className="profile-icon">
