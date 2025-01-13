@@ -45,7 +45,7 @@ const Login = () => {
           </div>
         </div>
       </main>
-
+<div className="movies-container">
       <div className="movies">
         {posters.map((poster, index) => (
           <div
@@ -64,6 +64,7 @@ const Login = () => {
             />
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

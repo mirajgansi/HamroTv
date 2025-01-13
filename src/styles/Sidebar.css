@@ -1,16 +1,16 @@
 /* Sidebar.css */
 .sidebar {
-  position: fixed; /* Fix the position of the sidebar */
-  top: 0;         /* Align to the top of the page */
-  left: 0;        /* Align to the left of the page */
+  position: fixed; 
+  top: 0;        
+  left: 0;       
   width: 60px;
-  height: 100vh;  /* Make it cover the full height of the viewport */
+  height: 100vh;  
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  background-color: transparent; /* Optional: Ensure the background color matches your design */
-  z-index: 1000;  /* Keeps the sidebar on top of other elements */
+  background-color: transparent; 
+  z-index: 1000;  
 }
 
 .search-bar {

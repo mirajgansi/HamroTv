@@ -1,8 +1,8 @@
+/* Ensure the background, font, and other general styles are correct */
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
   background: linear-gradient(to bottom, #150016, #76007C);
-
 }
 
 .signup-container {
@@ -16,72 +16,103 @@ body {
   box-shadow: 0 4px 10px rgb(255, 255, 255);
 }
 
-
-/* Form Wrapper Styling */
 .form-wrapper {
   background: rgba(255, 255, 255, 0.1);
   box-sizing: border-box;
   box-shadow: 0 4px 10px rgb(255, 255, 255);
   backdrop-filter: blur(12px);
   border-radius: 16px;
-  padding: 32px;
-  width: 25%;
+  padding: 2rem;
+  width: 22%;
+  max-width: 500px;
   text-align: center;
 }
+
 .profile h1 {
-  font-size: 28px;
-  color: #150016;
-  text-align: left; /* Align text to the left */
-  white-space: nowrap; /* Prevents the text from wrapping */
+  font-size: rem;
+  color: #E3B6B1;
+  text-align: left;
+  white-space: nowrap;
+  margin-left: 2%;
 }
 
 .profile .highlight {
   font-weight: normal;
-  font-size: 16px;
-  color: #E3B6B1;
-  animation: typing 4s steps(30) 1s 1 normal both, blink 0.75s step-end infinite; 
+  font-size: 1rem;
+  color: #ffffff;
+  animation: typing 4s steps(30) 1s 1 normal both, blink 0.75s step-end infinite;
 }
 
-/* Input Group Styling */
+/* Floating label input group */
 .input-group {
   position: relative;
-  width: 90%;
-  margin-bottom: 16px;
-  border: 1px solid #E3B6B1; 
+  width: 80%;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ccc;
   border-radius: 8px;
-  padding: 10px;
-  background: #522C5D;
+  padding: 1rem 1rem 1rem 3rem;
+
+  transition: all 0.3s ease-in-out;
 }
 
 .input-icon {
   position: absolute;
-  left: 12px;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
   color: #E3B6B1;
 }
 
-/* Input Field Styling */
 input {
   width: 100%;
-  padding: 12px 12px 12px 40px; /* Adjust padding to accommodate icon */
+  padding: 1rem 1rem 1rem 3rem;
   background: none;
   outline: none;
   color: white;
-  font-size: 14px;
+  font-size: 1rem;
   border: none;
   border-radius: 8px;
+  position: relative;
+  text-align: justify;
 }
 
-/* Button Styling */
+/* Placeholder Styling */
+input::placeholder {
+  color: transparent; /* Hide the default placeholder */
+}
+
+/* Label inside the border */
+.input-group label {
+  position: absolute;
+  top: 50%;
+  left: 3rem; /* Positioning label next to the icon */
+  transform: translateY(-50%);
+  color: #E3B6B1;
+  font-size: 1rem;
+  pointer-events: none; /* Prevent interaction with label */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Move label up when input is focused */
+.input-group.focused label {
+  top: 0.5rem; /* Move the label above the input field */
+  font-size: 1rem; /* Shrink label font size */
+  color: #ffffff; /* Change label color on focus */
+}
+
+/* Input Focus Styling */
+.input-group.focused input {
+  padding-left: 0rem; /* Adjust padding for the label */
+}
+
 .submit-btn {
   width: 50%;
-  padding: 12px;
+  padding: 1rem;
   background: #29104A;
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -90,19 +121,4 @@ input {
 
 .submit-btn:hover {
   background: #8b5cf6;
-}
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-/* Blinking cursor animation */
-@keyframes blink {
-  50% {
-    border-color: transparent;
-  }
 }

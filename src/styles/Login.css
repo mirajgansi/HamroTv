@@ -3,6 +3,7 @@ body{
   font-family: 'Arial', sans-serif;
   background: linear-gradient(to bottom,  #150016,#76007C);
   color: #E3B6B1;
+ 
 }
 main {
     margin: 0;
@@ -160,7 +161,14 @@ main {
     color: white;
     text-shadow: white;
 }
-
+.movies-container {
+  display: flex; /* Flexbox for the outer wrapper to align content */
+  justify-content: center; /* Centers the .movies div horizontally */
+  align-items: center; /* Centers the .movies div vertically */
+  width: 100%; /* Allows responsiveness */
+  height: 500px; /* Fixed height for the outer container */
+  overflow: hidden; /* Prevents overflow of the poster wrappers */
+}
 .movies {
     position: absolute;
     top: 50%;
