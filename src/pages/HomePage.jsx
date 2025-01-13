@@ -15,6 +15,12 @@ const HomePage = () => {
   const [newThisWeek, setNewThisWeek] = useState([]);
   const [trendingNow, setTrendingNow] = useState([]);
 
+
+  // const handleSearch = (e) => {
+  //   setSearchTerm(term);
+  // };
+
+
   // Simulate fetching data from the backend
   useEffect(() => {
     const fetchData = async () => {
@@ -46,8 +52,12 @@ const HomePage = () => {
     <div className="app-container">
       {/* Sidebar */}
       <div className="sidebar">
-        <Sidebar  movies={useEffect} />
+      <Sidebar  />
       </div>
+
+      <div className="search-container">
+     
+        </div>
     {/* Profile Icon*/ }
     <div className="profile-icon">
       <ProfileIcon />

@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Login.css';
-import './pages/sidebar.jsx';
+
 
 const Login = () => {
   const posters = [
@@ -21,8 +21,8 @@ const Login = () => {
           <h2>We are glad to see you back with us</h2>
           <form action="/api/login" method="post">
             <div className="input-group">
-              <img src={require("../icons/username.png")} alt="" className="input-icon" />
-              <input type="text" id="username" name="username" placeholder="Username" required />
+              <img src={require("../icons/email.png")} alt="" className="input-icon" />
+              <input type="text" id="username" name="username" placeholder="Email" required />
             </div>
             <div className="input-group">
               <img src={require("../icons/password.png")} alt="" className="input-icon" />
@@ -33,16 +33,15 @@ const Login = () => {
           <div className="alternative-login">
             <div className="divider">
               <span className="line"></span>
-              <span>Login with other</span>
+              <span>Login with Others</span>
               <span className="line"></span>
             </div>
             <button type="button" className="google-btn">
               <img src={require("../icons/google.png")} alt="Google logo" className="google-logo" />
               Login with Google
             </button>
-       
-              <span className="new-user">Create Account</span>
-            
+          <div><span className="new-user">Create Account</span>
+          </div>
           </div>
         </div>
       </main>
