@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Login from './pages/Login.jsx';
+import HomePage from './pages/HomePage.jsx';
 
 
 
@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
-   <Login />
+   <HomePage />
   </React.StrictMode>
 );
 

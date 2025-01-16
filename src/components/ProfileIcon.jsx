@@ -13,6 +13,10 @@ const ProfileIcon = () => {
     console.log("Switch account");
     // Add your switch account functionality here
   };
+  const handleSetting = () => {
+    console.log("Switch account");
+    // Add your switch account functionality here
+  };
   return (
     <div className="profile-icon-container">
       <img
@@ -36,6 +40,9 @@ const ProfileIcon = () => {
           </div>
           <button className="dropdown-button" onClick={handleSwitchAccount}>
             Switch Account
+          </button>
+          <button className="dropdown-button" onClick={handleSetting}>
+            setting
           </button>
           <button className="dropdown-button" onClick={handleLogout}>
             Log Out
