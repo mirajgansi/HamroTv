@@ -1,21 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Login.css";
 
-
-
 const Login = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const posters = [
     { id: 1, src: require("../assets/avatar.jpg"), alt: "Avatar movie poster" },
     { id: 2, src: require("../assets/american.jpg"), alt: "American Psycho movie poster" },
     { id: 3, src: require("../assets/TheGood.jpg"), alt: "The Good, The Bad, The Ugly movie poster" },
+
   ];
+
+  // Loop through items automatically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % posters.length);
+    }, 3000); // Change slide every 3 seconds
+    return () => clearInterval(interval);
+  }, [posters.length]);
 
   return (
     <div className="container">
+      {/* Logo Section */}
       <div className="Logo">
         <img src={require("../icons/logo.png")} alt="HamroTv Logo" />
       </div>
 
+      {/* Main Login Form */}
       <main>
         <div className="login-container">
           <h1>Welcome</h1>
@@ -38,6 +49,7 @@ const Login = () => {
             <button type="submit" className="login-btn">Next</button>
           </form>
 
+          {/* Alternative Login */}
           <div className="alternative-login">
             <div className="divider">
               <span className="line"></span>
@@ -55,23 +67,23 @@ const Login = () => {
         </div>
       </main>
 
-      <div className="movies-container">
-        <div className="movies">
+      {/* Slide Show */}
+      <div className="carousel-container">
+        <div
+          className="carousel"
+          style={{
+            transform: `translateX(-${currentIndex * (300 + 40)}px)`, // 300px width + 40px margin
+            transition: "transform 1s ease-in-out",
+          }}
+        >
           {posters.map((poster, index) => (
             <div
               key={poster.id}
-              className="poster-wrapper"
-              style={{
-                left: `${index * 120}px`,
-                transform: `rotate(${-10 + index * 10}deg)`,
-                zIndex: index,
-              }}
+              className={`carousel-item ${
+                index === currentIndex ? "center" : ""
+              }`}
             >
-              <img
-                src={poster.src}
-                alt={poster.alt}
-                className="movie-poster"
-              />
+              <img src={poster.src} alt={poster.alt} />
             </div>
           ))}
         </div>
