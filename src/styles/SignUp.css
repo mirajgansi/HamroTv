@@ -23,7 +23,8 @@ body {
   backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 2rem;
-  max-width: 1000px;
+  width: 30%;
+  max-width:500px;
   text-align: center;
 }
 
@@ -51,6 +52,7 @@ body {
   border-radius: 8px;
   padding: 1rem 1rem 1rem 3rem;
   transition: all 0.3s ease-in-out;
+  
 }
 
 .input-icon {
@@ -84,9 +86,7 @@ input::placeholder {
 /* Label inside the border */
 .input-group label {
   position: absolute;
-  top: 50%;
   left: 3rem; /* Positioning label next to the icon */
-  transform: translateY(-50%);
   color: #E3B6B1;
   font-size: 1rem;
   pointer-events: none; /* Prevent interaction with label */
@@ -95,9 +95,9 @@ input::placeholder {
 
 /* Move label up when input is focused */
 .input-group.focused label {
-  top: 0.5rem; /* Move the label above the input field */
+  top: 0.2rem; /* Move the label above the input field */
   font-size: 1rem; /* Shrink label font size */
-  color: #ffffff; /* Change label color on focus */
+  color: #E3B6B1; /* Change label color on focus */
 }
 
 /* Input Focus Styling */
@@ -109,7 +109,7 @@ input::placeholder {
   width: 50%;
   padding: 1rem;
   background: #29104A;
-  color: white;
+  color: #E3B6B1;
   font-size: 1rem;
   border: none;
   border-radius: 8px;
@@ -119,4 +119,25 @@ input::placeholder {
 
 .submit-btn:hover {
   background: #8b5cf6;
+}
+
+.already-user {
+  width: 100%;
+  margin-top: 1rem; /* Add spacing between the button and text */
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center align the text */
+  text-align: center; /* Center align the text */
+  color: #E3B6B1; /* Match the color theme */
+  line-height: 1; 
+}
+
+.already-user a {
+  color: #E3B6B1; /* Set link color */
+  text-decoration: none; /* Remove underline */
+  font-weight: normal;
+  transition: color 0.3s ease;
+}
+
+.already-user a:hover {
+  color: #8b5cf6; /* Change color on hover */
 }

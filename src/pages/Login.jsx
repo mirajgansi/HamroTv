@@ -1,24 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../styles/Login.css";
+import { Link} from "react-router-dom";
 
 const Login = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const posters = [
-    { id: 1, src: require("../assets/avatar.jpg"), alt: "Avatar movie poster" },
-    { id: 2, src: require("../assets/american.jpg"), alt: "American Psycho movie poster" },
-    { id: 3, src: require("../assets/TheGood.jpg"), alt: "The Good, The Bad, The Ugly movie poster" },
-
-  ];
-
-  // Loop through items automatically
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % posters.length);
-    }, 3000); // Change slide every 3 seconds
-    return () => clearInterval(interval);
-  }, [posters.length]);
-
   return (
     <div className="container">
       {/* Logo Section */}
@@ -44,11 +28,19 @@ const Login = () => {
               <img src={require("../icons/password.png")} alt="" className="input-icon" />
               <input type="password" id="password" name="password" placeholder=" " required />
               <label>Password</label>
+              
             </div>
-
+            <Link to="/HomePage">
             <button type="submit" className="login-btn">Next</button>
+            </Link>
+            
+            <div className="new-user">
+           <Link to="/forgot-password">Forgot Password?</Link>
+           </div>
+            
+            
           </form>
-
+         
           {/* Alternative Login */}
           <div className="alternative-login">
             <div className="divider">
@@ -60,35 +52,17 @@ const Login = () => {
               <img src={require("../icons/google.png")} alt="Google logo" className="google-logo" />
               Login with Google
             </button>
-            <div>
-              <span className="new-user">Create Account</span>
-            </div>
+            
+              <span className="new-user" >
+              <Link to="/signup">Create Account</Link></span>
+
           </div>
         </div>
       </main>
 
-      {/* Slide Show */}
-      <div className="carousel-container">
-        <div
-          className="carousel"
-          style={{
-            transform: `translateX(-${currentIndex * (300 + 40)}px)`, // 300px width + 40px margin
-            transition: "transform 1s ease-in-out",
-          }}
-        >
-          {posters.map((poster, index) => (
-            <div
-              key={poster.id}
-              className={`carousel-item ${
-                index === currentIndex ? "center" : ""
-              }`}
-            >
-              <img src={poster.src} alt={poster.alt} />
-            </div>
-          ))}
-        </div>
+    
       </div>
-    </div>
+   
   );
 };
 

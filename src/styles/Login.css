@@ -37,8 +37,8 @@ main {
     width: 400px; /* Reduced width */
     max-width: 400px; /* Reduced max-width */
     padding: 30px 10px;
-    margin-top:60%;
-    margin-left: 70%;
+    margin-top:30%;
+    margin-left: 180%;
     background: transparent;
     border-radius: 8px;
     text-align: center;
@@ -125,6 +125,7 @@ main {
     color: #FFE0E6;
     border: 1px solid transparent;
     border-radius: 20px;
+    margin-bottom: 2%;
     cursor: pointer;
 }
 
@@ -184,46 +185,13 @@ main {
     margin-left: 60%;
     padding: 0; 
     line-height: 1; 
+  
+  }
+  .new-user a {
+    text-decoration: none;
+    color: #E3B6B1; /* Your desired color */
 }
-
-.new-user:hover{
+.new-user a:hover{
     color: white;
     text-shadow: white;
-}
-.carousel-container {
-  overflow: hidden;
-  width: 50%; /* Use full width */
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  padding: 0; /* Reset padding */
-}
-
-.carousel {
-  display: flex;
-  transition: transform 1s ease-in-out;
-}
-
-.carousel-item {
-  flex: 0 0 auto;
-  width: 200px; /* Poster width */
-  margin-right: 0; /* Remove spacing between posters */
-  opacity: 0.5; /* Dim non-current posters */
-  transition: opacity 0.5s ease-in-out;
-}
-
-.carousel-item.center {
-  opacity: 1; /* Highlight the current poster */
-}
-
-.carousel-item img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-/* Adjust this to center the first image */
-.carousel-container {
-  display: flex;
-  justify-content: flex-start; /* Align the first image to the center */
-  padding-left: calc(50% - 100px); /* Adjust based on the width of one image (100px for 200px width) */
 }

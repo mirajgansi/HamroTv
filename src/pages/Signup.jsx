@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/SignUp.css"; 
+import { Link } from "react-router-dom";
 
 import usernameIcon from "../icons/username.png";
 import emailIcon from "../icons/email.png";
@@ -52,6 +53,8 @@ const Signup = () => {
     confirmPasswordInput.addEventListener("focus", () => handleFocus(confirmPasswordRef));
     confirmPasswordInput.addEventListener("blur", () => handleBlur(confirmPasswordRef));
 
+
+
     // Clean up event listeners on component unmount
     return () => {
       usernameInput.removeEventListener("focus", () => handleFocus(usernameRef));
@@ -83,6 +86,7 @@ const Signup = () => {
 
   return (
     <div className="signup-container">
+      
       <div className="logo">
         {/* Logo goes here */}
       </div>
@@ -157,9 +161,13 @@ const Signup = () => {
               title="Password must be at least 8 characters long"
             />
             <label>Confirm Password</label>
+          
           </div>
 
           <button type="submit" className="submit-btn">Sign Up</button>
+          <span className="already-user">
+          Already have an account?  <Link to="/"> Log In</Link>
+         </span>
         </form>
       </div>
     </div>
