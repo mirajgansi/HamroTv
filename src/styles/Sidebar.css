@@ -1,18 +1,35 @@
-/* Sidebar.css */
+/* Define CSS variables for color consistency */
+:root {
+  --primary-color: #E3B6B1;
+  --hover-color: rgba(0, 0, 0, 0.8);
+  --button-bg: #007bff;
+  --button-text-color: #ffffff;
+  --search-border: #ccc;
+  --sidebar-bg: transparent;
+}
+
+/* Sidebar container */
 .sidebar {
-  position: fixed; 
-  top: 0;        
-  left: 0;       
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 60px;
-  height: 100vh;  
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  background-color: transparent; 
-  z-index: 1000;  
+  background-color: var(--sidebar-bg);
+  z-index: 1000;
+  transition: width 0.3s ease; /* Smooth transition for expanded state */
 }
 
+/* Expanded sidebar */
+.sidebar.expanded {
+  width: 200px; /* Adjusted width for expanded state */
+}
+
+/* Search bar */
 .search-bar {
   width: 100%;
   margin-top: 10px;
@@ -23,7 +40,7 @@
 .search-bar input {
   flex: 1;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--search-border);
   border-radius: 4px;
 }
 
@@ -31,13 +48,18 @@
   margin-left: 5px;
   padding: 5px 10px;
   cursor: pointer;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--button-bg);
+  color: var(--button-text-color);
   border: none;
   border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
+.search-bar button:hover {
+  background-color: var(--primary-color);
+}
 
+/* Sidebar menu */
 .sidebar-menu {
   list-style-type: none;
   padding: 0;
@@ -47,6 +69,7 @@
   margin: 15px 0;
 }
 
+/* Sidebar buttons */
 .sidebar-button {
   width: 100%;
   display: flex;
@@ -58,27 +81,77 @@
   padding: 10px;
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease; /* Added transition for border-radius */
-  border-radius: 150px; /* Always apply border-radius */
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease;
+  border-radius: 150px;
+  position: relative; /* Ensure hover-text is positioned correctly */
 }
 
 .sidebar-button:hover {
-  background-color: #E3B6B1;
-  transform: scale(1.05); /* Slight scaling effect on hover */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Adds shadow effect */
+  background-color: var(--primary-color);
+  transform: scale(1.05);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Active state for sidebar buttons */
+.sidebar-button.active {
+  background-color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Hover text for buttons */
+.sidebar-button .hover-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  background-color: var(--hover-color);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  top: 50%;
+  left: 120%; /* Adjusted to give more space to the hover text */
+  transform: translateY(-50%);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.sidebar-button:hover .hover-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Icon styles */
 .icon {
-  margin-right: 5px;
+  margin-right: 10px;
   font-size: 20px;
-  transition: font-size 0.2s ease; /* Smooth transition for icon size */
+  text-align: center;
+  transition: font-size 0.2s ease;
 }
 
+/* Expanded sidebar button text */
 .sidebar-button span {
   flex-grow: 1;
 }
 
-/* Optional: Add an expanded sidebar state for better experience */
-.sidebar.expanded {
-  width: 200px; /* Adjust this to the desired expanded width */
+/* New user link styles */
+.new-user a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+/* Dark mode compatibility */
+body.dark-mode .sidebar {
+  background-color: #333;
+}
+
+body.dark-mode .sidebar-button {
+  color: #ccc;
+}
+
+body.dark-mode .sidebar-button:hover {
+  background-color: #555;
+}
+
+body.dark-mode .search-bar input {
+  border-color: #555;
 }

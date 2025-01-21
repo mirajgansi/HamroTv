@@ -1,5 +1,8 @@
 import React from "react";
 import "../styles/Login.css";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock,faEnvelope  } from "@fortawesome/free-solid-svg-icons";
 import { Link} from "react-router-dom";
 
 const Login = () => {
@@ -18,19 +21,19 @@ const Login = () => {
           <form action="/api/login" method="post">
             {/* Username Field */}
             <div className="input-group">
-              <img src={require("../icons/email.png")} alt="" className="input-icon" />
+              <FontAwesomeIcon icon={faEnvelope }  className="input-login-icon" />
               <input type="text" id="username" name="username" placeholder=" " required />
               <label>Email</label>
             </div>
 
             {/* Password Field */}
             <div className="input-group">
-              <img src={require("../icons/password.png")} alt="" className="input-icon" />
+             <FontAwesomeIcon icon={faLock} alt="" className="input-login-icon" />
               <input type="password" id="password" name="password" placeholder=" " required />
               <label>Password</label>
               
             </div>
-            <Link to="/HomePage">
+            <Link to="/home-page">
             <button type="submit" className="login-btn">Next</button>
             </Link>
             

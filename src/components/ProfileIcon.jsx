@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Profile.css"; // Include the CSS file for styling
+import { Link } from "react-router-dom";
 const ProfileIcon = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const handleDropdownToggle = () => {
@@ -42,10 +43,10 @@ const ProfileIcon = () => {
             Switch Account
           </button>
           <button className="dropdown-button" onClick={handleSetting}>
-            setting
+          <Link to="/setting">Setting </Link>
           </button>
           <button className="dropdown-button" onClick={handleLogout}>
-            Log Out
+          <Link to="/">Log Out </Link>
           </button>
         </div>
       )}

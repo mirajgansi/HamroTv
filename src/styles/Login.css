@@ -14,7 +14,8 @@ main {
     display: flex;
     min-height: 100vh;
     background: linear-gradient(to bottom,  #150016,#76007C);
-  
+    max-width: 400px; /* Reduced max-width */
+    max-height: 500px;
 }
 
 .Logo {
@@ -22,11 +23,12 @@ main {
     top: 10px;
     left: 55px;
     cursor: pointer; 
+    border-radius: none;
 }
 
 .Logo img {
-    width: 260px; 
-    height: 150px;
+    width: 120px; 
+    height: 50px;
     
 }
 .Logo:hover{
@@ -35,16 +37,14 @@ main {
 }
 .login-container {
     width: 400px; /* Reduced width */
-    max-width: 400px; /* Reduced max-width */
     padding: 30px 10px;
     margin-top:30%;
     margin-left: 180%;
     background: transparent;
-    border-radius: 8px;
+    border-radius: 15px;
     text-align: center;
     height: 600px;
     box-sizing: border-box;
-    border-radius: 10px;
     box-shadow: 0 4px 10px rgb(255, 255, 255);
 }
 
@@ -61,7 +61,7 @@ main {
     font-weight: normal;
     color: #FFE0E6;
     margin-bottom: 10%;
-    border-radius: 8px;
+ 
 }
 
 /* Floating Label Input Field */
@@ -71,7 +71,6 @@ main {
   margin-bottom: 1.5rem;
   padding: 0.5rem 1rem;
   border-bottom: 2px solid #ccc;
-  border-radius: 8px;
   transition: border-color 0.3s ease-in-out;
   padding-top: 10px;
 }
@@ -108,16 +107,17 @@ main {
   border-color: #29104A;
 }
 
-.input-icon {
+.input-login-icon{
   position: absolute;
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 1.25rem;
+  width: 1.2rem;
   height: 1.25rem;
 }
 
 .login-btn {
+  all: unset;
     width: 364px;
     padding: 10px;
     font-size: 16px;
@@ -130,9 +130,11 @@ main {
 }
 
 .login-btn:hover {
-
     box-shadow: #150016 0 0 20px 1px;
-
+    background: #29104A;
+}
+.login-btn:focus {
+ outline :none;
 }
 
 
@@ -157,8 +159,10 @@ main {
 .google-btn {
     justify-content: center;
     width: 364px;
-    margin: 10px;
-    padding: 10px;
+    margin-bottom: 2%;
+    padding: 10%;
+    padding-bottom: 10%;
+    padding: 5px;
     font-size: 16px;
     background-color: transparent;
     border-style: solid;
@@ -167,15 +171,17 @@ main {
     border-radius: 15px;
     cursor: pointer;
 }
-
+.google-btn text{
+  margin-bottom: 10px;
+}
 .google-btn:hover {
+    background-color: transparent;
     box-shadow: #FFE0E6 0 0 1px 1px;
 }
 
 .google-logo {
     width: 20px;
     height: 20px;
-    vertical-align: middle;
     margin-right: 10px;
 }
 .new-user {
@@ -189,7 +195,7 @@ main {
   }
   .new-user a {
     text-decoration: none;
-    color: #E3B6B1; /* Your desired color */
+    color: #E3B6B1;
 }
 .new-user a:hover{
     color: white;

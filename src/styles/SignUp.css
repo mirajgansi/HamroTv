@@ -13,7 +13,7 @@ body {
   min-height: 100vh;
   font-family: 'Arial', sans-serif;
   box-sizing: border-box;
-  box-shadow: 0 4px 10px rgb(255, 255, 255);
+
 }
 
 .form-wrapper {
@@ -128,7 +128,7 @@ input::placeholder {
   justify-content: center; /* Center align the text */
   text-align: center; /* Center align the text */
   color: #E3B6B1; /* Match the color theme */
-  line-height: 1; 
+   line-height: 1; 
 }
 
 .already-user a {
