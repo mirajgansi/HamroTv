@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import HomePage from "./pages/HomePage.jsx";
-import Sidebar from "./components/SideBar.jsx";
+
 import ForgotPassword from "./components/ForgotPassword.jsx";
 import SettingsPage from "./components/Setting.jsx";
 
@@ -11,7 +11,7 @@ const App = () => {
   return (
     <Router>
       <div style={{ display: "flex" }}>
-        <Sidebar />
+      
         <div style={{ marginLeft: "60px", width: "100%" }}>
           <Routes>
             <Route path="/" element={<Login />} />

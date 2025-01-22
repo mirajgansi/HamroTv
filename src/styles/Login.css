@@ -12,6 +12,9 @@ main {
   }
 .container {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     min-height: 100vh;
     background: linear-gradient(to bottom,  #150016,#76007C);
     max-width: 400px; /* Reduced max-width */
@@ -22,8 +25,9 @@ main {
     position: absolute;
     top: 10px;
     left: 55px;
+
     cursor: pointer; 
-    border-radius: none;
+    border-radius: 0px;
 }
 
 .Logo img {
@@ -38,12 +42,11 @@ main {
 .login-container {
     width: 400px; /* Reduced width */
     padding: 30px 10px;
-    margin-top:30%;
-    margin-left: 180%;
+    margin-left: 170%;
     background: transparent;
     border-radius: 15px;
     text-align: center;
-    height: 600px;
+    height: 610px;
     box-sizing: border-box;
     box-shadow: 0 4px 10px rgb(255, 255, 255);
 }
@@ -67,7 +70,7 @@ main {
 /* Floating Label Input Field */
 .input-group {
   position: relative;
-  width: 90%;
+  width: 100%;
   margin-bottom: 1.5rem;
   padding: 0.5rem 1rem;
   border-bottom: 2px solid #ccc;
@@ -98,8 +101,8 @@ main {
 
 .input-group input:focus + label,
 .input-group input:not(:placeholder-shown) + label {
-  top: -10px;
-  font-size: 0.85rem;
+  top: 10px;
+  font-size: 1rem;
   color: #FFE0E6;
 }
 

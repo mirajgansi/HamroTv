@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "../styles/SignUp.css"; 
 import { Link } from "react-router-dom";
 
-import usernameIcon from "../icons/username.png";
-import emailIcon from "../icons/email.png";
-import passwordIcon from "../icons/password.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock,faEnvelope,faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -99,7 +98,7 @@ const Signup = () => {
             className={`input-group ${clickedUsername || username ? "focused" : ""}`}
             onClick={() => setClickedUsername(true)}
           >
-            <img src={usernameIcon} alt="Username Icon" className="input-icon" />
+             <FontAwesomeIcon icon={faUser }  alt="Username Icon" className="input-icon" />
             <input 
               ref={usernameRef}
               type="text" 
@@ -115,7 +114,7 @@ const Signup = () => {
             className={`input-group ${clickedEmail || email ? "focused" : ""}`}
             onClick={() => setClickedEmail(true)}
           >
-            <img src={emailIcon} alt="Email Icon" className="input-icon" />
+             <FontAwesomeIcon icon={faEnvelope } alt="Email Icon" className="input-icon" />
             <input 
               ref={emailRef}
               type="email" 
@@ -131,7 +130,7 @@ const Signup = () => {
             className={`input-group ${clickedPassword || password ? "focused" : ""}`}
             onClick={() => setClickedPassword(true)}
           >
-            <img src={passwordIcon} alt="Password Icon" className="input-icon" />
+             <FontAwesomeIcon icon={faLock } alt="Password Icon" className="input-icon" />
             <input
               ref={passwordRef}
               type="password"
@@ -149,7 +148,7 @@ const Signup = () => {
             className={`input-group ${clickedConfirmPassword || confirmPassword ? "focused" : ""}`}
             onClick={() => setClickedConfirmPassword(true)}
           >
-            <img src={passwordIcon} alt="Confirm Password Icon" className="input-icon" />
+             <FontAwesomeIcon icon={faLock } alt="Confirm Password Icon" className="input-icon" />
             <input
               ref={confirmPasswordRef}
               type="password"
