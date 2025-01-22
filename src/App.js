@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import HomePage from "./pages/HomePage.jsx";
@@ -11,7 +13,6 @@ const App = () => {
   return (
     <Router>
       <div style={{ display: "flex" }}>
-      
         <div style={{ marginLeft: "60px", width: "100%" }}>
           <Routes>
             <Route path="/" element={<Login />} />

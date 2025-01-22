@@ -1,119 +1,160 @@
-import React, { useState } from 'react';
-import "../styles/Setting.css";
+import React, { useState, useRef } from "react"
+import "bootstrap/dist/css/bootstrap.min.css"
+import "../styles/Setting.css"
+import { FaCamera, FaEdit } from "react-icons/fa"
 
 const SettingsPage = () => {
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [profilePicture, setProfilePicture] = useState(null);
-    const [deleteAccount, setDeleteAccount] = useState(false);
-    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-    const [email, setEmail] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-  
-    // Handle changes
-    const handleNameChange = (e) => setName(e.target.value);
-    const handlePasswordChange = (e) => setPassword(e.target.value);
-    const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
-    const handleProfilePictureChange = (e) => {
-      const file = e.target.files[0];
-      if (file) setProfilePicture(URL.createObjectURL(file));
-    };
-  
-    // Handle Delete Account
-    const handleDeleteAccount = () => {
-      setShowConfirmationModal(true); // Show confirmation modal
-    };
-  
-    const confirmDeletion = () => {
-      console.log("Account deleted with email:", email, "and password:", confirmPassword);
-      setShowConfirmationModal(false); 
-      setDeleteAccount(true); 
-    };
-  
-    return (
-      <div className="settings-page">
-        <h2>Settings</h2>
-  
-        {/* Rename */}
-        <div className="setting-item">
-          <label>Rename Your Name</label>
+  // Assume these values are imported from the backend
+  const [name, setName] = useState("John Doe")
+  const [email, setEmail] = useState("john.doe@example.com")
+  const [isEditing, setIsEditing] = useState(false)
+  const [newName, setNewName] = useState("")
+  const [notifications, setNotifications] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [profilePicture, setProfilePicture] = useState("/placeholder.svg")
+  const fileInputRef = useRef(null)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log("Settings saved:", { name, email, notifications })
+  }
+
+  const handlePasswordChange = (e) => {
+    e.preventDefault()
+    console.log("Password change requested:", { currentPassword, newPassword, confirmPassword })
+  }
+
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setProfilePicture(URL.createObjectURL(file))
+      console.log("Profile picture changed:", file)
+    }
+  }
+
+  const handleRename = () => {
+    if (isEditing) {
+      // Here you would typically send the new name to your backend
+      setName(newName)
+      setIsEditing(false)
+    } else {
+      setNewName(name)
+      setIsEditing(true)
+    }
+  }
+
+  return (
+    <div className="settings-container">
+      <div className="profile-section">
+        <div className="profile-picture-container">
+          <img src={profilePicture || "/placeholder.svg"} alt="Profile" className="profile-picture" />
+          <label htmlFor="profile-picture-input" className="profile-picture-upload">
+            <FaCamera />
+          </label>
           <input
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-            placeholder="Enter new name"
-          />
-        </div>
-  
-        {/* Change Password */}
-        <div className="setting-item">
-          <label>Change Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-            placeholder="Enter old password"
-          />
-          <input
-            type="password"
-            value={newPassword}
-            onChange={handleNewPasswordChange}
-            placeholder="Enter new password"
-          />
-        </div>
-  
-        {/* Change Profile Picture */}
-        <div className="setting-item">
-          <label>Change Profile Picture</label>
-          <input
+            id="profile-picture-input"
             type="file"
-            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
             onChange={handleProfilePictureChange}
+            accept="image/*"
           />
-          {profilePicture && (
-            <div>
-              <img src={profilePicture} alt="Profile" width={100} height={100} />
-            </div>
-          )}
         </div>
-  
-        {/* Delete Account */}
-        <div className="setting-item">
-          <button onClick={handleDeleteAccount} className="delete-btn">
-            {deleteAccount ? "Account Deleted" : "Delete Account"}
+        <div className="profile-info">
+          {isEditing ? (
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              className="form-control mb-2"
+            />
+          ) : (
+            <h2>{name}</h2>
+          )}
+          <button onClick={handleRename} className="btn btn-outline-primary btn-sm">
+            {isEditing ? (
+              "Save"
+            ) : (
+              <>
+                <FaEdit /> Rename
+              </>
+            )}
           </button>
         </div>
-  
-        {/* Confirmation Modal */}
-        {showConfirmationModal && (
-          <div className="modal">
-            <div className="modal-content">
-              <h3>Are you sure you want to delete your account?</h3>
-              <div className="modal-inputs">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                />
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Enter your password"
-                />
-              </div>
-              <div className="modal-actions">
-                <button onClick={confirmDeletion}>Yes, Delete My Account</button>
-                <button onClick={() => setShowConfirmationModal(false)}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
-  
+        <p>{email}</p>
       </div>
-    );
-  };
-  
-  export default SettingsPage;
+
+      <form onSubmit={handleSubmit}>
+        <div className="settings-section">
+          <h2 className="settings-section-title">Preferences</h2>
+          <div className="form-check form-switch">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="notifications"
+              checked={notifications}
+              onChange={(e) => setNotifications(e.target.checked)}
+            />
+            <label className="form-check-label" htmlFor="notifications">
+              Enable Notifications
+            </label>
+          </div>
+        </div>
+
+        <div className="settings-section">
+          <h2 className="settings-section-title">Change Password</h2>
+          <form onSubmit={handlePasswordChange}>
+            <div className="mb-3">
+              <label htmlFor="currentPassword" className="form-label">
+                Current Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="currentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newPassword" className="form-label">
+                New Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirm New Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            <button type="submit" className="btn btn-secondary">
+              Change Password
+            </button>
+          </form>
+        </div>
+
+        <button type="submit" className="btn btn-primary">
+          Save Settings
+        </button>
+      </form>
+    </div>
+  )
+}
+
+export default SettingsPage
+
