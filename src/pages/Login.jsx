@@ -22,7 +22,7 @@ const Login = () => {
             {/* Username Field */}
             <div className="input-group">
               <FontAwesomeIcon icon={faEnvelope }  className="input-login-icon" />
-              <input type="text" id="username" name="username" placeholder=" " required />
+              <input type="text" id="username" name="username" placeholder=" " autocomplete="off " required />
               <label>Email</label>
             </div>
 
@@ -33,7 +33,7 @@ const Login = () => {
               <label>Password</label>
               
             </div>
-            <Link to="/home-page">
+            <Link to="/Main">
             <button type="submit" className="login-btn">Next</button>
             </Link>
             

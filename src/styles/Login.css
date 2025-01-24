@@ -72,7 +72,7 @@ main {
 /* Floating Label Input Field */
 .input-group {
   position: relative;
-  width: 100%;
+  width: 100% !important;
   margin-bottom: 1.5rem;
   padding: 0.5rem 1rem;
   border-bottom: 2px solid #ccc;
@@ -100,7 +100,14 @@ main {
   pointer-events: none;
   transition: all 0.3s ease-in-out;
 }
-
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus,
+.input-group input:-webkit-autofill:active {
+  -webkit-text-fill-color: white; /* Text color */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset; /* Background color */
+  transition: background-color 5000s ease-in-out 0s; /* Prevent background color change */
+}
 .input-group input:focus + label,
 .input-group input:not(:placeholder-shown) + label {
   top: 10px;
@@ -136,7 +143,7 @@ main {
 
 .login-btn:hover {
     box-shadow: #150016 0 0 20px 1px;
-    background: #29104A;
+    background: #29104A !important;
 }
 .login-btn:focus {
  outline :none;

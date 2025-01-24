@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
-import HomePage from "./pages/HomePage.jsx";
+import Main from "./pages/Main.jsx";
 
 import ForgotPassword from "./components/ForgotPassword.jsx";
 import SettingsPage from "./components/Setting.jsx";
@@ -17,7 +17,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/home-page" element={<HomePage />} />
+            <Route path="/main" element={<Main />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/setting" element={<SettingsPage />} />
           </Routes>

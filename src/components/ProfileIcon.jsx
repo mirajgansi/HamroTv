@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import "../styles/Profile.css"; // Include the CSS file for styling
 import { Link } from "react-router-dom";
+
+
+
+
+
+
 const ProfileIcon = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const handleDropdownToggle = () => {

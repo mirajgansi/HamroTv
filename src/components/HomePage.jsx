@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HomePage.css"; 
-import Sidebar from "../components/SideBar.jsx";
-import ProfileIcon from "../components/ProfileIcon.jsx";
 // Import images from the assets folder
 import american from "../assets/american.jpg";
 import avatar from "../assets/avatar.jpg";
@@ -10,16 +8,10 @@ import pulpFiction from "../assets/pulp-fiction.jpg";
 import spiderMan from "../assets/spiderman.jpg";
 import theGood from "../assets/TheGood.jpg";
 
-const HomePage = () => {
+const MainLayout = ({ children }) => {
   const [mainContent, setMainContent] = useState([]);
   const [newThisWeek, setNewThisWeek] = useState([]);
   const [trendingNow, setTrendingNow] = useState([]);
-
-
-  // const handleSearch = (e) => {
-  //   setSearchTerm(term);
-  // };
-
 
   // Simulate fetching data from the backend
   useEffect(() => {
@@ -50,35 +42,23 @@ const HomePage = () => {
 
   return (
     <div className="app-container">
-      {/* Sidebar */}
-      <div className="sidebar">
-      <Sidebar  />
-      </div>
-
-      <div className="search-container">
-     
-        </div>
-    {/* Profile Icon*/ }
-    <div className="profile-icon">
-      <ProfileIcon />
-    </div>
       {/* Main Content */}
       <div className="main-content">
-
         {/* Banner Section */}
         <div className="banner">
           <div className="banner-main">
-        <div className="carousel">
-            {mainContent.map((movie) => (
-              <div className="movie-card" key={movie.id}>
-                <img src={movie.thumbnail} alt={movie.title} />
-              </div>
-            ))}
+            <div className="carousel">
+              {mainContent.map((movie) => (
+                <div className="movie-card" key={movie.id}>
+                  <img src={movie.thumbnail} alt={movie.title} />
+                </div>
+              ))}
+            </div>
           </div>
+          <div className="banner-buttons">
+            <button>Play</button>
+            <button>Watch Trailer</button>
           </div>
-          <div className="banner-buttons"><button>Play</button>
-          <button>Watch Trailer</button></div>
-            
         </div>
 
         {/* Sections */}
@@ -105,9 +85,10 @@ const HomePage = () => {
             ))}
           </div>
         </div>
+        {children && <div className="extra-content">{children}</div>}
       </div>
     </div>
   );
 };
 
-export default HomePage;
+export default MainLayout;

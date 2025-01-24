@@ -1,36 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faSearch, faFilm, faTv, faBell } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Sidebar.css";
 import { Link } from "react-router-dom";
 
-const Sidebar = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false); // Track the sidebar state
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const toggleSearchBar = () => {
-    setIsSearchBarVisible(!isSearchBarVisible);
-  };
-
-  const toggleSidebar = () => {
-    setIsSidebarExpanded(!isSidebarExpanded); // Toggle the expanded state of the sidebar
-  };
-
+const Sidebar = ({ toggleSearchBar }) => {
   return (
-    <div className={`sidebar ${isSidebarExpanded ? "expanded" : ""}`}>
+    <div className="sidebar">
       <ul className="sidebar-menu">
+        {/* Search Icon */}
         <li>
           <button className="sidebar-button" onClick={toggleSearchBar}>
             <FontAwesomeIcon icon={faSearch} className="icon" />
+            <span className="hover-text">Search</span>
           </button>
         </li>
+
+        {/* Other Menu Items */}
         <li>
-          <Link to="/home-page">
+          <Link to="/main">
             <button className="sidebar-button">
               <FontAwesomeIcon icon={faHome} className="icon" />
               <span className="hover-text">Home</span>
@@ -50,7 +38,7 @@ const Sidebar = () => {
           </button>
         </li>
         <li>
-          <button className="sidebar-button">
+          <button className="sidebar-button" onClick={toggleSearchBar} >
             <FontAwesomeIcon icon={faBell} className="icon" />
             <span className="hover-text">Notification</span>
           </button>

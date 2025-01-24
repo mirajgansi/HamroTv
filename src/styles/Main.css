@@ -1,0 +1,118 @@
+/* General Styles */
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+
+  margin-left: 60px; /* Adjust to match the Sidebar width */
+  margin-top: 20px; /* Adjust to match the Sidebar top margin */
+}
+
+.sidebar {
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  margin-left: 1%;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.sidebar ul li {
+  font-size: 24px;
+  margin: 20px 0;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.sidebar ul li:hover {
+  color: #8e44ad;
+}
+
+.search-bar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500; /* Ensure it appears above other content */
+  box-shadow: 0 4px 30px 10px rgba(26, 22, 22, 0.5);
+  border-radius: 10%;
+}
+
+.search-bar-center {
+  background-color: transparent; /* Transparent background */
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #FFE0E6; /* Bottom border */
+  width: 60%;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgb(255, 255, 255);
+  
+}
+
+/* Search Bar Input */
+.search-bar-input {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent; /* Transparent background */
+  border: none; /* Remove default border */
+  border-radius: 4px;
+  font-size: 16px;
+  color: #FFE0E6; /* Text color */
+  outline: none; /* Remove default outline */
+}
+
+/* Placeholder Styling */
+.search-bar-input::placeholder {
+  color: #FFE0E6; /* Placeholder text color */
+  opacity: 1; /* Slightly transparent placeholder */
+  
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-x: hidden;
+}
+/* Profile Icon */
+.profile-icon {
+  position: fixed; /* Fix the profile icon to the top */
+  top: 20px; /* Align with the Sidebar */
+  right: 20px;
+  z-index: 10; /* Ensure it appears above other content */
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .profile-icon {
+    top: 5px;
+    right: 5px;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+}

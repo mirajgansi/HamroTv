@@ -10,10 +10,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 100vh; /* Full viewport height */
   font-family: 'Arial', sans-serif;
   box-sizing: border-box;
-
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 .form-wrapper {
@@ -23,7 +26,7 @@ body {
   backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 2rem;
-  width: 30%;
+  width: 35%;
   max-width:500px;
   text-align: center;
 }
