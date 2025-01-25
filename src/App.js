@@ -1,28 +1,46 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { ProfilePictureProvider } from "./components/ProfilePictureContext.jsx";
 
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Main from "./pages/Main.jsx";
-
 import ForgotPassword from "./components/ForgotPassword.jsx";
 import SettingsPage from "./components/Setting.jsx";
+
+import ProfileIcon from "./components/ProfileIcon.jsx";
+import ProfilePictureUpload from "./components/ProfilePictureUpload.jsx";
 
 const App = () => {
   return (
     <Router>
-      <div style={{ display: "flex" }}>
-        <div style={{ marginLeft: "60px", width: "100%" }}>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/main" element={<Main />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/setting" element={<SettingsPage />} />
-          </Routes>
-        </div>
-      </div>
+      {/* Wrap the entire app with ProfilePictureProvider */}
+      <ProfilePictureProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/main"
+            element={
+              <>
+                <ProfileIcon />
+                <Main />
+              </>
+            }
+          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/setting"
+            element={
+              <>
+                <ProfileIcon />
+                <SettingsPage />
+              </>
+            }
+          />
+        </Routes>
+      </ProfilePictureProvider>
     </Router>
   );
 };

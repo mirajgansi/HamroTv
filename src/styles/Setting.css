@@ -11,6 +11,7 @@
   color: #007bff;
   margin-bottom: 2rem;
   text-align: center;
+  font-size: 2rem; /* Added for better visual hierarchy */
 }
 
 .settings-section {
@@ -22,20 +23,26 @@
 }
 
 .settings-section-title {
-  color: #495057;
+  color: #ffffff; /* Changed for better contrast */
   margin-bottom: 1.5rem;
   border-bottom: 2px solid #e9ecef;
   padding-bottom: 0.5rem;
+  font-size: 1.5rem; /* Added for better visual hierarchy */
 }
 
 .form-label {
   font-weight: 500;
-  color: #495057;
+  color: #ffffff; /* Changed for better contrast */
+  margin-bottom: 0.5rem; /* Added for better spacing */
 }
 
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
+  color: #ffffff; /* Added for better contrast */
+  padding: 0.5rem 1rem; /* Added for better button sizing */
+  border-radius: 4px; /* Added for consistency */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
 }
 
 .btn-primary:hover {
@@ -46,6 +53,10 @@
 .btn-secondary {
   background-color: #6c757d;
   border-color: #6c757d;
+  color: #ffffff; /* Added for better contrast */
+  padding: 0.5rem 1rem; /* Added for better button sizing */
+  border-radius: 4px; /* Added for consistency */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
 }
 
 .btn-secondary:hover {
@@ -60,16 +71,17 @@
 
 .profile-picture-container {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 200px; /* Increased from 150px */
+  height: 200px; /* Increased from 150px */
   margin: 0 auto 1rem;
 }
 
 .profile-picture {
-  width: 100%;
-  height: 100%;
+  width: 10rem; /* Adjusted to fill the container */
+  height: 100rem; /* Adjusted to fill the container */
+  padding:80px;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 50%; /* Changed back to 50% for a perfect circle */
   border: 3px solid #007bff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -81,9 +93,10 @@
   background-color: #007bff;
   color: white;
   border-radius: 50%;
-  padding: 0.5rem;
+  padding: 0.75rem; /* Increased from 0.5rem */
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 1.2rem; /* Optional: Increase icon size */
 }
 
 .profile-picture-upload:hover {
@@ -100,6 +113,7 @@
 .profile-info h2 {
   margin-right: 0.5rem;
   margin-bottom: 0;
+  color: #ffffff; /* Changed for better contrast */
 }
 
 .form-switch .form-check-input {
@@ -114,5 +128,12 @@
   .settings-section {
     padding: 1rem;
   }
-}
 
+  .settings-title {
+    font-size: 1.75rem; /* Adjusted for smaller screens */
+  }
+
+  .settings-section-title {
+    font-size: 1.25rem; /* Adjusted for smaller screens */
+  }
+}

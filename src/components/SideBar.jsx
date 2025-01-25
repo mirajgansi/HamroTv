@@ -38,7 +38,7 @@ const Sidebar = ({ toggleSearchBar }) => {
           </button>
         </li>
         <li>
-          <button className="sidebar-button" onClick={toggleSearchBar} >
+          <button className="sidebar-button" >
             <FontAwesomeIcon icon={faBell} className="icon" />
             <span className="hover-text">Notification</span>
           </button>
