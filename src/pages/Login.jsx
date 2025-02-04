@@ -1,49 +1,114 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Login.css";
-
+import api from "../Script/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock,faEnvelope  } from "@fortawesome/free-solid-svg-icons";
-import { Link} from "react-router-dom";
+import { faLock, faEnvelope, } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(''), 1000); // Clears error after 1 second
+      return () => clearTimeout(timer); // Cleanup function
+    }
+  }, [error]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email.trim() || !password.trim()) {
+      setError('Email and password cannot be empty.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await api.post('/login', { email, password });
+      localStorage.setItem('token', response.data.token);
+      console.log('Login successful:', response.data);
+      navigate('/Main'); // Redirect after login
+    } catch (err) {
+      console.error('Login error:', err.response?.data || err.message);
+      setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="container">
+      {/* Error Message Display */}
+      {error && <div className="error-message">{error}</div>}
+
       {/* Logo Section */}
       <div className="Logo">
-        <img src={require("../icons/logo.png")} alt="HamroTv Logo" />
+        <img src={require("../icons/logo.png")} alt="HamroTV Logo" />
       </div>
 
       {/* Main Login Form */}
-      <main>
         <div className="login-container">
           <h1>Welcome</h1>
           <h2>We are glad to see you back with us</h2>
-          <form action="/api/login" method="post">
-            {/* Username Field */}
+          <form onSubmit={handleSubmit}>
+            {/* Email Field */}
             <div className="input-group">
-              <FontAwesomeIcon icon={faEnvelope }  className="input-login-icon" />
-              <input type="text" id="username" name="username" placeholder=" " autocomplete="off " required />
-              <label>Email</label>
-            </div>
+          <FontAwesomeIcon icon={faEnvelope} className="input-login-icon" />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder=" "
+            autoComplete="email"
+            value={email}
+            required
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError('');
+            }}
+          />
+          <label htmlFor="email">Email</label>
+        </div>
 
             {/* Password Field */}
             <div className="input-group">
-             <FontAwesomeIcon icon={faLock} alt="" className="input-login-icon" />
-              <input type="password" id="password" name="password" placeholder=" " required />
-              <label>Password</label>
-              
-            </div>
-            <Link to="/Main">
-            <button type="submit" className="login-btn">Next</button>
-            </Link>
+          <FontAwesomeIcon icon={faLock} className="input-login-icon" />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder=" "
+            autoComplete="current-password"
+            value={password}
+            required
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError('');
+            }}
+          />
+          <label htmlFor="password">Password</label>
+        </div>
+        {error && <p className="error-message">{error}</p>}
+            
+            <button 
+              type="submit" 
+              className="login-btn"
+              disabled={isLoading}>
+            
+              {isLoading ? 'Loading...' : 'Next'}
+            </button>
+
             
             <div className="new-user">
-           <Link to="/forgot-password">Forgot Password?</Link>
-           </div>
-            
-            
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </div>
           </form>
-         
+
           {/* Alternative Login */}
           <div className="alternative-login">
             <div className="divider">
@@ -56,17 +121,13 @@ const Login = () => {
               Login with Google
             </button>
             
-              <span className="new-user" >
-              <Link to="/signup">Create Account</Link></span>
-
+            <span className="new-user">
+              <Link to="/signup">Create Account</Link>
+            </span>
           </div>
         </div>
-      </main>
-
-    
       </div>
-   
-  );
-};
+    );
+  };
 
-export default Login;
+  export default Login;

@@ -148,7 +148,16 @@ main {
 .login-btn:focus {
  outline :none;
 }
-
+.error-message {
+  color: #ff4444;
+  background: #a00018;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 20px auto;
+  width: 80%;
+  text-align: center;
+  border: 1px solid #000000;
+}
 
 .divider{
     display: flex;

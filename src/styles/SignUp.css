@@ -102,7 +102,18 @@ input::placeholder {
   font-size: 1rem; /* Shrink label font size */
   color: #E3B6B1; /* Change label color on focus */
 }
-
+.error-message {
+  color: #ff4444;
+  background: #ffebee;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 20px auto;
+  width: 80%;
+  text-align: center;
+  border: 1px solid #ff4444;
+  animation: fadeOut 1s forwards;
+  animation-delay: 1s;
+}
 /* Input Focus Styling */
 .input-group.focused input {
   padding-left: 0rem; /* Adjust padding for the label */

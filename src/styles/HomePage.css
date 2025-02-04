@@ -142,7 +142,7 @@
   .carousel {
     display: flex;
     gap: 20px;
-    overflow-x: auto;
+    overflow-x:  scroll;
     padding-bottom: 10px;
   }
   

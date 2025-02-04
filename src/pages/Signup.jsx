@@ -1,172 +1,203 @@
 import React, { useState, useEffect, useRef } from "react";
-import "../styles/SignUp.css"; 
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock,faEnvelope,faUser } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
+import api from "../Script/api";
+import "../styles/SignUp.css";
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password_hash: "",
+    confirmPassword: ""
+  });
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  const [clickedUsername, setClickedUsername] = useState(false);
-  const [clickedEmail, setClickedEmail] = useState(false);
-  const [clickedPassword, setClickedPassword] = useState(false);
-  const [clickedConfirmPassword, setClickedConfirmPassword] = useState(false);
+  const [clickedFields, setClickedFields] = useState({
+    username: false,
+    email: false,
+    password_hash: false,
+    confirmPassword: false
+  });
 
-  // Refs for accessing the input and its group
-  const usernameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const confirmPasswordRef = useRef(null);
+  const handleFocus = (field) => {
+    setClickedFields(prev => ({ ...prev, [field]: true }));
+  };
 
-  // Focus and blur event handlers
-  useEffect(() => {
-    const handleFocus = (inputRef) => {
-      inputRef.current.parentElement.classList.add("focused");
-    };
+  const handleBlur = (field, value) => {
+    if (!value) {
+      setClickedFields(prev => ({ ...prev, [field]: false }));
+    }
+  };
 
-    const handleBlur = (inputRef) => {
-      if (inputRef.current.value === "") {
-        inputRef.current.parentElement.classList.remove("focused");
-      }
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setError("");
+  };
 
-    // Set up focus and blur events for each input field
-    const usernameInput = usernameRef.current;
-    const emailInput = emailRef.current;
-    const passwordInput = passwordRef.current;
-    const confirmPasswordInput = confirmPasswordRef.current;
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return regex.test(password);
+  };
 
-    usernameInput.addEventListener("focus", () => handleFocus(usernameRef));
-    usernameInput.addEventListener("blur", () => handleBlur(usernameRef));
-
-    emailInput.addEventListener("focus", () => handleFocus(emailRef));
-    emailInput.addEventListener("blur", () => handleBlur(emailRef));
-
-    passwordInput.addEventListener("focus", () => handleFocus(passwordRef));
-    passwordInput.addEventListener("blur", () => handleBlur(passwordRef));
-
-    confirmPasswordInput.addEventListener("focus", () => handleFocus(confirmPasswordRef));
-    confirmPasswordInput.addEventListener("blur", () => handleBlur(confirmPasswordRef));
-
-
-
-    // Clean up event listeners on component unmount
-    return () => {
-      usernameInput.removeEventListener("focus", () => handleFocus(usernameRef));
-      usernameInput.removeEventListener("blur", () => handleBlur(usernameRef));
-
-      emailInput.removeEventListener("focus", () => handleFocus(emailRef));
-      emailInput.removeEventListener("blur", () => handleBlur(emailRef));
-
-      passwordInput.removeEventListener("focus", () => handleFocus(passwordRef));
-      passwordInput.removeEventListener("blur", () => handleBlur(passwordRef));
-
-      confirmPasswordInput.removeEventListener("focus", () => handleFocus(confirmPasswordRef));
-      confirmPasswordInput.removeEventListener("blur", () => handleBlur(confirmPasswordRef));
-    };
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // Password and confirm password validation
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+    if (formData.password_hash !== formData.confirmPassword) {
+      setError("Passwords do not match!");
       return;
     }
 
-    // Handle form submission logic here
-    console.log("Form submitted", { username, email, password, confirmPassword });
+    if (!validatePassword(formData.password_hash)) {
+      setError(
+        "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number."
+      );
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      console.log("Submitting:", formData);
+      const response = await api.post("/register", {
+        username: formData.username,
+        email: formData.email,
+        password_hash: formData.password_hash
+      });
+
+      if (response.data.success) {
+        setError("Signup successful! Redirecting to login...");
+        setTimeout(() => navigate("/login"), 2000);
+      }
+    } catch (err) {
+      handleApiError(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleApiError = (error) => {
+    if (!error.response) {
+      setError("Server not responding. Please try again later.");
+    } else {
+      const errorMessage =
+        error.response.data.message || "Registration failed. Please try again";
+      setError(errorMessage);
+    }
+    setTimeout(() => setError(""), 3000);
   };
 
   return (
     <div className="signup-container">
-      
-      <div className="logo">
-        {/* Logo goes here */}
-      </div>
+      {error && <div className="error-message">{error}</div>}
+
       <div className="form-wrapper">
         <div className="profile">
-          <h1>Welcome <span className="highlight"> <br />to the family! Begin your journey with us <br /> by signing up</span></h1>
+          <h1>
+            Welcome{" "}
+            <span className="highlight">
+              <br />
+              to the family! Begin your journey with us <br /> by signing up
+            </span>
+          </h1>
         </div>
+
         <form className="signup-form" onSubmit={handleSubmit}>
-          <div 
-            className={`input-group ${clickedUsername || username ? "focused" : ""}`}
-            onClick={() => setClickedUsername(true)}
+          <div
+            className={`input-group ${
+              clickedFields.username || formData.username ? "focused" : ""
+            }`}
           >
-             <FontAwesomeIcon icon={faUser }  alt="Username Icon" className="input-icon" />
-            <input 
-              ref={usernameRef}
-              type="text" 
-              placeholder=" " 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-              required 
+            <FontAwesomeIcon icon={faUser} className="input-icon" />
+            <input
+              type="text"
+              name="username"
+              placeholder=" "
+              value={formData.username}
+              onChange={handleInputChange}
+              onFocus={() => handleFocus("username")}
+              onBlur={(e) => handleBlur("username", e.target.value)}
+              required
+              minLength="3"
             />
             <label>Username</label>
           </div>
 
-          <div 
-            className={`input-group ${clickedEmail || email ? "focused" : ""}`}
-            onClick={() => setClickedEmail(true)}
+          <div
+            className={`input-group ${
+              clickedFields.email || formData.email ? "focused" : ""
+            }`}
           >
-             <FontAwesomeIcon icon={faEnvelope } alt="Email Icon" className="input-icon" />
-            <input 
-              ref={emailRef}
-              type="email" 
-              placeholder=" " 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
+            <FontAwesomeIcon icon={faEnvelope} className="input-icon" />
+            <input
+              type="email"
+              name="email"
+              placeholder=" "
+              value={formData.email}
+              onChange={handleInputChange}
+              onFocus={() => handleFocus("email")}
+              onBlur={(e) => handleBlur("email", e.target.value)}
+              required
             />
             <label>Email</label>
           </div>
 
-          <div 
-            className={`input-group ${clickedPassword || password ? "focused" : ""}`}
-            onClick={() => setClickedPassword(true)}
+          <div
+            className={`input-group ${
+              clickedFields.password_hash || formData.password_hash
+                ? "focused"
+                : ""
+            }`}
           >
-             <FontAwesomeIcon icon={faLock } alt="Password Icon" className="input-icon" />
+            <FontAwesomeIcon icon={faLock} className="input-icon" />
             <input
-              ref={passwordRef}
               type="password"
+              name="password_hash"
               placeholder=" "
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password_hash}
+              onChange={handleInputChange}
+              onFocus={() => handleFocus("password_hash")}
+              onBlur={(e) => handleBlur("password_hash", e.target.value)}
               required
-              pattern=".{8,}"
-              title="Password must be at least 8 characters long"
+              minLength="8"
             />
             <label>Create Password</label>
           </div>
 
-          <div 
-            className={`input-group ${clickedConfirmPassword || confirmPassword ? "focused" : ""}`}
-            onClick={() => setClickedConfirmPassword(true)}
+          <div
+            className={`input-group ${
+              clickedFields.confirmPassword || formData.confirmPassword
+                ? "focused"
+                : ""
+            }`}
           >
-             <FontAwesomeIcon icon={faLock } alt="Confirm Password Icon" className="input-icon" />
+            <FontAwesomeIcon icon={faLock} className="input-icon" />
             <input
-              ref={confirmPasswordRef}
               type="password"
+              name="confirmPassword"
               placeholder=" "
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              onFocus={() => handleFocus("confirmPassword")}
+              onBlur={(e) => handleBlur("confirmPassword", e.target.value)}
               required
-              pattern=".{8,}"
-              title="Password must be at least 8 characters long"
+              minLength="8"
             />
             <label>Confirm Password</label>
-          
           </div>
+          <Link to="/">
+          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? <div className="spinner"></div> : "Sign Up"}
+          </button></Link>
+          
 
-          <button type="submit" className="submit-btn">Sign Up</button>
           <span className="already-user">
-          Already have an account?  <Link to="/"> Log In</Link>
-         </span>
+            Already have an account? <Link to="/">Log In</Link>
+          </span>
         </form>
       </div>
     </div>
