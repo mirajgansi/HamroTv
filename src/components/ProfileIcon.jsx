@@ -49,9 +49,11 @@ const ProfileIcon = () => {
               <p className="profile-email">PeeteGRIFIN@example.com</p>
             </div>
           </div>
+          <Link to="/adminpage">
           <button className="dropdown-button" onClick={handleSwitchAccount}>
             Switch Account
           </button>
+          </Link>
           <button className="dropdown-button" onClick={handleSetting}>
             <Link to="/setting">Setting</Link>
           </button>
