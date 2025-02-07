@@ -30,7 +30,7 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const response = await api.post('/login', { email, password });
+      const response = await api.post('loginUser/', { email, password });
       localStorage.setItem('token', response.data.token);
       console.log('Login successful:', response.data);
       navigate('/Main'); // Redirect after login

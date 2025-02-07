@@ -71,7 +71,7 @@ const Signup = () => {
 
       if (response.data.success) {
         setError("Signup successful! Redirecting to login...");
-        setTimeout(() => navigate("/login"), 2000);
+        setTimeout(() => navigate("/loginUser"), 2000);
       }
     } catch (err) {
       handleApiError(err);
