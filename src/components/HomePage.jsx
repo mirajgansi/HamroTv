@@ -44,6 +44,18 @@ const Carousel = ({ movies, title, handleThumbnailClick }) => (
     </div>
   </div>
 );
+const getEmbedUrl = (url) => {
+  if (url.includes('youtube.com')) {
+    // Convert youtube.com/watch?v=VIDEO_ID to youtube.com/embed/VIDEO_ID
+    const videoId = url.split('v=')[1];
+    return `https://www.youtube.com/embed/${videoId}`;
+  } else if (url.includes('vimeo.com')) {
+    // Handle Vimeo URLs similarly
+    const videoId = url.split('vimeo.com/')[1];
+    return `https://player.vimeo.com/video/${videoId}`;
+  }
+  return url;
+};
 
 const MainLayout = ({ children }) => {
   const { movies, loading, error } = useFetchMovies();
@@ -87,7 +99,7 @@ const MainLayout = ({ children }) => {
             </li>
           ))}
         </ul>
-
+          
         <Carousel
           movies={movies}
           title="New This Week"
@@ -110,14 +122,14 @@ const MainLayout = ({ children }) => {
             </button>
             {selectedTrailer.includes("youtube.com") || selectedTrailer.includes("vimeo.com") ? (
               <iframe
-                width="560"
-                height="315"
-                src={selectedTrailer}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              width="560"
+              height="315"
+              src={getEmbedUrl(selectedTrailer)} // pass selectedTrailer here
+              title="Video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
             ) : (
               <p>Invalid trailer URL</p>
             )}
