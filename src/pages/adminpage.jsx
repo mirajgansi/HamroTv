@@ -15,7 +15,7 @@ export default function AdminPage() {
 
   // Fetch movie from backend
   useEffect(() => {
-    api.get("movie/") 
+    api.get("movies/") 
           .then((res) => setMovies(res.data))
       .catch((err) => console.error("Error fetching movie:", err));
   }, []);
@@ -29,16 +29,12 @@ export default function AdminPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("movie/", { 
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newMovie)
-      });
+      const response = await api.post("/movies/", newMovie); 
       console.log("Response:", response);
   
-      if (response.ok) {
-        const updatedMovie = await response.json();
-        setMovies([...movie, updatedMovie]); // Append new movie to list
+      if (response.status === 201) {  // ✅ Explicitly check for 201 Created
+        const updatedMovie = response.data; // Axios handles JSON automatically
+        setMovies([...movie, updatedMovie]); // Append new movie
         setNewMovie({
           movie_name: "",
           movie_description: "",
@@ -48,6 +44,7 @@ export default function AdminPage() {
           director: "",
           rating: ""
         });
+        console.log("Movie added successfully!");
       } else {
         console.error("Failed to add movie:", response.statusText);
       }
@@ -55,6 +52,7 @@ export default function AdminPage() {
       console.error("Error adding movie:", error.message);
     }
   };
+  
 
   return (
     <div className="p-4">
@@ -72,7 +70,7 @@ export default function AdminPage() {
       <h2 className="text-xl font-semibold mt-4">Movies List</h2>
       <ul>
         {movie.map((movie) => (
-          <li key={movie.movie_name} className="p-2 border-b">
+          <li key={movie.movie_id} className="p-2 border-b">
             {movie.movie_name} - {movie.genre} ({movie.release_year})
           </li>
         ))}
