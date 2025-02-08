@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password_hash, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,14 +23,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email.trim() || !password.trim()) {
+    if (!email.trim() || !password_hash.trim()) {
       setError('Email and password cannot be empty.');
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await api.post('loginUser/', { email, password });
+      const response = await api.post('/users/login', { email, password_hash });
       localStorage.setItem('token', response.data.token);
       console.log('Login successful:', response.data);
       navigate('/Main'); // Redirect after login
@@ -85,7 +85,7 @@ const Login = () => {
             name="password"
             placeholder=" "
             autoComplete="current-password"
-            value={password}
+            value={password_hash}
             required
             onChange={(e) => {
               setPassword(e.target.value);
