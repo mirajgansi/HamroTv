@@ -31,9 +31,9 @@ const Carousel = ({ movies, title, handleThumbnailClick }) => (
     <h2>{title}</h2>
     <div className="carousel">
       {movies.map((movie) => (
-        <div className="movie-card" key={movie.id}>
+        <div className="movie-card" key={movie.movie_id}>
           <img
-            src={movie.thumbnail || "https://via.placeholder.com/150"}
+            src={`http://localhost:5000/${movie.thumbnailupload}`} 
             alt={movie.movie_name}
             onClick={() => handleThumbnailClick(movie.youtube_link)}
             style={{ cursor: "pointer" }}
@@ -47,16 +47,15 @@ const Carousel = ({ movies, title, handleThumbnailClick }) => (
 const getEmbedUrl = (url) => {
   if (url.includes('youtube.com')) {
     // Convert youtube.com/watch?v=VIDEO_ID to youtube.com/embed/VIDEO_ID
-    const videoId = url.split('v=')[1];
+    const videoId = url.split('v=')[1].split('&')[0]; // Handles extra URL parameters
     return `https://www.youtube.com/embed/${videoId}`;
   } else if (url.includes('vimeo.com')) {
     // Handle Vimeo URLs similarly
     const videoId = url.split('vimeo.com/')[1];
     return `https://player.vimeo.com/video/${videoId}`;
   }
-  return url;
+  return url; // If it's not YouTube or Vimeo, return the original URL
 };
-
 const MainLayout = ({ children }) => {
   const { movies, loading, error } = useFetchMovies();
   const [selectedTrailer, setSelectedTrailer] = useState(null);

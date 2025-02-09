@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import api from "../Script/api"; // Ensure this is imported
+import api from "../Script/api"; // Ensure this is correctly imported
 
 export default function AdminPage() {
-  const [movie, setMovies] = useState([]);
+  const [movie, setMovie] = useState([]);
   const [newMovie, setNewMovie] = useState({
     movie_name: "",
     movie_description: "",
@@ -10,31 +10,71 @@ export default function AdminPage() {
     release_year: "",
     genre: "",
     director: "",
-    rating: ""
+    rating: "",
+    thumbnailupload: "", 
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch movie from backend
+  // Fetch movies from the backend
   useEffect(() => {
-    api.get("movies/") 
-          .then((res) => setMovies(res.data))
-      .catch((err) => console.error("Error fetching movie:", err));
+    api.get("/movies")
+      .then((res) => setMovie(res.data))
+      .catch((err) => console.error("Error fetching movies:", err));
   }, []);
 
-  // Handle input change
+  // Handle text input change
   const handleChange = (e) => {
-    setNewMovie({ ...newMovie, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setNewMovie({ ...newMovie, [name]: value });
   };
 
-  // Submit form to add a movie
+  // Handle file selection
+  const handleFileChange = (e) => {
+    setNewMovie({ ...newMovie, thumbnailupload: e.target.files[0] }); // Save file object
+  };
+
+  // Submit form with image upload
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    // Validate release year and rating
+    const currentYear = new Date().getFullYear();
+    if (newMovie.release_year < 1900 || newMovie.release_year > currentYear) {
+      alert("Please enter a valid release year.");
+      setIsLoading(false);
+      return;
+    }
+    if (newMovie.rating < 0 || newMovie.rating > 10) {
+      alert("Rating must be between 0 and 10.");
+      setIsLoading(false);
+      return;
+    }
+    if (!newMovie.thumbnailupload) {
+      alert("Please select a thumbnail image.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await api.post("/movies/", newMovie); 
+      const formData = new FormData();
+      formData.append("movie_name", newMovie.movie_name);
+      formData.append("movie_description", newMovie.movie_description);
+      formData.append("youtube_link", newMovie.youtube_link);
+      formData.append("release_year", newMovie.release_year);
+      formData.append("genre", newMovie.genre);
+      formData.append("director", newMovie.director);
+      formData.append("rating", newMovie.rating);
+      formData.append("thumbnailUpload", newMovie.thumbnailupload); // Ensure this matches the server-side key
+
+      const response = await api.post("/movies", formData, {
+        headers: { "Content-Type": "multipart/form-data" }, // ✅ Important for file uploads
+      });
+
       console.log("Response:", response);
-  
-      if (response.status === 201) {  // ✅ Explicitly check for 201 Created
-        const updatedMovie = response.data; // Axios handles JSON automatically
-        setMovies([...movie, updatedMovie]); // Append new movie
+
+      if (response.status === 201) {
+        setMovie((prevMovies) => [...prevMovies, response.data]); // Append new movie to state
         setNewMovie({
           movie_name: "",
           movie_description: "",
@@ -42,17 +82,21 @@ export default function AdminPage() {
           release_year: "",
           genre: "",
           director: "",
-          rating: ""
+          rating: "",
+          thumbnailupload: null,
         });
         console.log("Movie added successfully!");
       } else {
         console.error("Failed to add movie:", response.statusText);
+        alert("Failed to add movie. Please try again.");
       }
     } catch (error) {
       console.error("Error adding movie:", error.message);
+      alert("Error adding movie. Please check the console for details.");
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
   return (
     <div className="p-4">
@@ -65,8 +109,15 @@ export default function AdminPage() {
         <input className="border p-2" type="text" name="genre" placeholder="Genre" value={newMovie.genre} onChange={handleChange} required />
         <input className="border p-2" type="text" name="director" placeholder="Director" value={newMovie.director} onChange={handleChange} required />
         <input className="border p-2" type="number" name="rating" placeholder="Rating" step="0.1" value={newMovie.rating} onChange={handleChange} required />
-        <button className="bg-blue-500 text-white p-2 rounded" type="submit">Add Movie</button>
+
+        {/* ✅ File Input for Thumbnail */}
+        <input className="border p-2" type="file" accept="image/*" name="thumbnailUpload" onChange={handleFileChange} required />
+
+        <button className="bg-blue-500 text-white p-2 rounded" type="submit" disabled={isLoading}>
+          {isLoading ? "Adding..." : "Add Movie"}
+        </button>
       </form>
+
       <h2 className="text-xl font-semibold mt-4">Movies List</h2>
       <ul>
         {movie.map((movie) => (
