@@ -97,7 +97,20 @@ export default function AdminPage() {
       setIsLoading(false);
     }
   };
+  const handleDelete = async (movieId) => {
+    if (!window.confirm("Are you sure you want to delete this movie?")) {
+      return;
+    }
 
+    try {
+      await api.delete(`/movies/${movieId}`);
+      setMovie(prevMovies => prevMovies.filter(movie => movie.movie_id !== movieId));
+      console.log("Movie deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting movie:", error.message);
+      alert("Failed to delete movie. Please try again.");
+    }
+  };
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">Admin Panel - Add Movies</h1>

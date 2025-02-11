@@ -1,10 +1,12 @@
 import React, { useState, useRef, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Setting.css";
+import api from "../Script/api"; // Make sure this is set up correctly for your API requests
 import ProfilePictureUpload from "./ProfilePictureUpload";
 import { FaCamera, FaEdit } from "react-icons/fa";
-import { ProfilePictureContext } from "./ProfilePictureContext.jsx"; // Correct import
+import { ProfilePictureContext } from "./ProfilePictureContext.jsx"; 
 import { Link } from "react-router-dom";
+import axios from "axios"; // Import Axios
 
 const SettingsPage = () => {
   // State for user profile
@@ -26,7 +28,23 @@ const SettingsPage = () => {
   // Handle form submission for general settings
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Settings saved:", { name, email, notifications });
+    
+    // Send email and notifications update to backend
+    const updatedUserData = {
+      name,
+      email,
+      notifications,
+    };
+
+    axios.put("/api/user/settings", updatedUserData) // Adjust the URL based on your backend
+      .then(response => {
+        console.log("Settings saved:", response.data);
+        // You can provide feedback to the user if needed
+      })
+      .catch(error => {
+        console.error("Error saving settings:", error);
+        alert("Failed to save settings");
+      });
   };
 
   // Handle password change
@@ -36,12 +54,40 @@ const SettingsPage = () => {
       alert("New password and confirm password do not match!");
       return;
     }
-    console.log("Password change requested:", { currentPassword, newPassword, confirmPassword });
+
+    // Send password change request to backend
+    const passwordData = {
+      currentPassword,
+      newPassword,
+    };
+
+    axios.post("/api/user/change-password", passwordData) // Adjust the URL based on your backend
+      .then(response => {
+        console.log("Password changed:", response.data);
+        // Provide feedback to the user
+      })
+      .catch(error => {
+        console.error("Error changing password:", error);
+        alert("Failed to change password");
+      });
   };
 
   // Handle profile picture upload
   const handleSaveProfilePicture = (croppedImage) => {
     setProfilePicture(croppedImage); // Update the global profile picture state
+
+    // Send the new profile picture to the backend
+    const formData = new FormData();
+    formData.append("profilePicture", croppedImage); // Append the image file
+    axios.post("/api/user/upload-profile-picture", formData) // Adjust the URL based on your backend
+      .then(response => {
+        console.log("Profile picture updated:", response.data);
+        // Provide feedback to the user if needed
+      })
+      .catch(error => {
+        console.error("Error uploading profile picture:", error);
+        alert("Failed to upload profile picture");
+      });
   };
 
   // Handle name editing

@@ -9,6 +9,7 @@ import ForgotPassword from "./components/ForgotPassword.jsx";
 import SettingsPage from "./components/Setting.jsx";
 import Adminpage from "./pages/adminpage.jsx";
 import ProfileIcon from "./components/ProfileIcon.jsx";
+import MoviePage from "./components/MoviePage.jsx";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/movie/:id" element={<MoviePage />} />
         <Route
           path="/main"
           element={
