@@ -1,0 +1,100 @@
+.admin-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #fff; /* White text for contrast */
+}
+
+.admin-heading {
+    margin-top: 5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #FFE0E6; /* Soft pink heading */
+    text-shadow: 0 0 10px rgba(255, 224, 230, 0.5);
+}
+
+.movie-form {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(41, 16, 74, 0.3); /* Transparent purple background */
+    border-radius: 15px;
+    text-align: center;
+    height: 610px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgb(255, 255, 255); /* Soft pink shadow */
+    border: 1px solid; /* Purple border */
+}
+
+.form-input {
+    padding: 0.8rem;
+    border: 1px solid #29104A; /* Purple border */
+    border-radius: 4px;
+    width: 100%;
+    background: rgba(255, 224, 230, 0.1); /* Semi-transparent pink background */
+    color: #FFE0E6; /* Pink text */
+}
+
+.form-input::placeholder {
+    color: rgba(255, 224, 230, 0.7); /* Semi-transparent placeholder */
+}
+
+.form-textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: #29104A; /* Deep purple */
+    color: #FFE0E6; /* Soft pink */
+    padding: 0.8rem 1.5rem;
+    border: 1px solid #FFE0E6; /* Pink border */
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #3D1A6B; /* Lighter purple */
+    box-shadow: 0 0 15px rgba(255, 224, 230, 0.4);
+}
+
+.submit-btn:disabled {
+    background: #1A0A2F !important; /* Darker purple */
+    border-color: #29104A;
+    box-shadow: 0 0 20px rgba(21, 0, 22, 0.5);
+    opacity: 0.7;
+}
+
+.movies-list {
+    list-style: none;
+    padding: 0;
+}
+
+.movie-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #29104A; /* Purple border */
+    background: rgba(41, 16, 74, 0.2); /* Transparent purple background */
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+}
+
+.delete-btn {
+    background: linear-gradient(45deg, #ef4444, #dc2626); /* Red gradient */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(45deg, #dc2626, #ef4444);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}

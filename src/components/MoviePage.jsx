@@ -33,13 +33,17 @@ const MoviePage = () => {
       <iframe
         width="800"
         height="450"
-        src={`https://www.youtube.com/embed/${movie.youtube_link.split('v=')[1]}`}
+        src={`https://www.youtube.com/embed/${movie.youtube_link.split('v=')[1].split('&')[0]}`}
         title="Movie Trailer"
         frameBorder="0"
         allow="autoplay; encrypted-media"
         allowFullScreen
       ></iframe>
-      <p>{movie.description}</p>
+      <p>{movie.movie_description}</p>
+        <p>{movie.release_year}</p>
+        <p>{movie.genre}</p>
+        <p>{movie.director}</p>
+        <p>{movie.rating}</p>
     </div>
   );
 };

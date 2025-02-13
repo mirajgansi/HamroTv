@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../Script/api"; // Ensure this is correctly imported
+import "../styles/adminpage.css"; 
 
 export default function AdminPage() {
   const [movie, setMovie] = useState([]);
@@ -14,6 +15,7 @@ export default function AdminPage() {
     thumbnailupload: "", 
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [editingMovie, setEditingMovie] = useState(null); // State to track which movie is being edited
 
   // Fetch movies from the backend
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function AdminPage() {
     setNewMovie({ ...newMovie, thumbnailupload: e.target.files[0] }); // Save file object
   };
 
-  // Submit form with image upload
+  // Handle submit for adding or updating movie
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -67,36 +69,53 @@ export default function AdminPage() {
       formData.append("rating", newMovie.rating);
       formData.append("thumbnailUpload", newMovie.thumbnailupload); // Ensure this matches the server-side key
 
-      const response = await api.post("/movies", formData, {
-        headers: { "Content-Type": "multipart/form-data" }, // ✅ Important for file uploads
-      });
-
-      console.log("Response:", response);
-
-      if (response.status === 201) {
-        setMovie((prevMovies) => [...prevMovies, response.data]); // Append new movie to state
-        setNewMovie({
-          movie_name: "",
-          movie_description: "",
-          youtube_link: "",
-          release_year: "",
-          genre: "",
-          director: "",
-          rating: "",
-          thumbnailupload: null,
+      if (editingMovie) {
+        // Update existing movie
+        const response = await api.put(`/movies/${editingMovie.movie_id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
-        console.log("Movie added successfully!");
+
+        if (response.status === 200) {
+          setMovie((prevMovies) =>
+            prevMovies.map((movie) =>
+              movie.movie_id === editingMovie.movie_id ? response.data : movie
+            )
+          );
+          console.log("Movie updated successfully!");
+        }
       } else {
-        console.error("Failed to add movie:", response.statusText);
-        alert("Failed to add movie. Please try again.");
+        // Add new movie
+        const response = await api.post("/movies", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (response.status === 201) {
+          setMovie((prevMovies) => [...prevMovies, response.data]);
+          console.log("Movie added successfully!");
+        }
       }
+
+      // Reset form and state
+      setNewMovie({
+        movie_name: "",
+        movie_description: "",
+        youtube_link: "",
+        release_year: "",
+        genre: "",
+        director: "",
+        rating: "",
+        thumbnailupload: null,
+      });
+      setEditingMovie(null); // Reset editing state
     } catch (error) {
-      console.error("Error adding movie:", error.message);
-      alert("Error adding movie. Please check the console for details.");
+      console.error("Error adding/updating movie:", error.message);
+      alert("Error adding/updating movie. Please check the console for details.");
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Handle delete
   const handleDelete = async (movieId) => {
     if (!window.confirm("Are you sure you want to delete this movie?")) {
       return;
@@ -104,38 +123,117 @@ export default function AdminPage() {
 
     try {
       await api.delete(`/movies/${movieId}`);
-      setMovie(prevMovies => prevMovies.filter(movie => movie.movie_id !== movieId));
+      setMovie((prevMovies) => prevMovies.filter((movie) => movie.movie_id !== movieId));
       console.log("Movie deleted successfully!");
     } catch (error) {
       console.error("Error deleting movie:", error.message);
       alert("Failed to delete movie. Please try again.");
     }
   };
+
+  // Handle editing a movie
+  const handleEdit = (movieToEdit) => {
+    setEditingMovie(movieToEdit);
+    setNewMovie(movieToEdit); // Pre-fill the form with movie details
+  };
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Admin Panel - Add Movies</h1>
-      <form className="grid gap-2" onSubmit={handleSubmit}>
-        <input className="border p-2" type="text" name="movie_name" placeholder="Movie Name" value={newMovie.movie_name} onChange={handleChange} required />
-        <textarea className="border p-2" name="movie_description" placeholder="Movie Description" value={newMovie.movie_description} onChange={handleChange} required />
-        <input className="border p-2" type="text" name="youtube_link" placeholder="YouTube Link" value={newMovie.youtube_link} onChange={handleChange} required />
-        <input className="border p-2" type="number" name="release_year" placeholder="Release Year" value={newMovie.release_year} onChange={handleChange} required />
-        <input className="border p-2" type="text" name="genre" placeholder="Genre" value={newMovie.genre} onChange={handleChange} required />
-        <input className="border p-2" type="text" name="director" placeholder="Director" value={newMovie.director} onChange={handleChange} required />
-        <input className="border p-2" type="number" name="rating" placeholder="Rating" step="0.1" value={newMovie.rating} onChange={handleChange} required />
-
-        {/* ✅ File Input for Thumbnail */}
-        <input className="border p-2" type="file" accept="image/*" name="thumbnailUpload" onChange={handleFileChange} required />
-
-        <button className="bg-blue-500 text-white p-2 rounded" type="submit" disabled={isLoading}>
+    <div className="admin-container">
+      <h1 className="admin-heading">Admin Panel - Add Movies</h1>
+      <form className="movie-form" onSubmit={handleSubmit}>
+        <input
+          className="form-input"
+          type="text"
+          name="movie_name"
+          placeholder="Movie Name"
+          value={newMovie.movie_name}
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          className="form-input form-textarea"
+          name="movie_description"
+          placeholder="Movie Description"
+          value={newMovie.movie_description}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="form-input"
+          type="text"
+          name="youtube_link"
+          placeholder="YouTube Link"
+          value={newMovie.youtube_link}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="form-input"
+          type="number"
+          name="release_year"
+          placeholder="Release Year"
+          value={newMovie.release_year}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="form-input"
+          type="text"
+          name="genre"
+          placeholder="Genre"
+          value={newMovie.genre}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="form-input"
+          type="text"
+          name="director"
+          placeholder="Director"
+          value={newMovie.director}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="form-input"
+          type="number"
+          name="rating"
+          placeholder="Rating"
+          step="0.1"
+          value={newMovie.rating}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="form-input file-input"
+          type="file"
+          accept="image/*"
+          name="thumbnailUpload"
+          onChange={handleFileChange}
+          required
+        />
+        <button
+          className="submit-btn"
+          type="submit"
+          disabled={isLoading}
+        >
           {isLoading ? "Adding..." : "Add Movie"}
         </button>
       </form>
 
-      <h2 className="text-xl font-semibold mt-4">Movies List</h2>
-      <ul>
-        {movie.map((movie) => (
-          <li key={movie.movie_id} className="p-2 border-b">
-            {movie.movie_name} - {movie.genre} ({movie.release_year})
+      <h2 className="admin-heading">Movies List</h2>
+      <ul className="movies-list">
+        {movie.map((movieItem) => (
+          <li key={movieItem.movie_id} className="movie-item">
+            <div>
+              {movieItem.movie_name} - {movieItem.genre} ({movieItem.release_year})
+            </div>
+            <button
+              className="delete-btn"
+              onClick={() => handleDelete(movieItem.movie_id)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>

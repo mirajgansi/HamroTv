@@ -71,9 +71,8 @@ const MainLayout = ({ children }) => {
     <div className="app-container">
       <div className="main-content">
         {/* ✅ Clicking on a movie now redirects to the details page */}
-        {topRecommendations.length > 0 && <Carousel movies={topRecommendations} title="Top Recommendations" />}
-        <Carousel movies={movies} title="New This Week" />
-        <Carousel movies={movies} title="Trending Now" />
+        {topRecommendations.length > 0 && <Carousel movies={topRecommendations} title="Movies" />}
+        
         {children && <div className="extra-content">{children}</div>}
       </div>
     </div>

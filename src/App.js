@@ -10,6 +10,8 @@ import SettingsPage from "./components/Setting.jsx";
 import Adminpage from "./pages/adminpage.jsx";
 import ProfileIcon from "./components/ProfileIcon.jsx";
 import MoviePage from "./components/MoviePage.jsx";
+import Sidebar from "./components/SideBar.jsx";
+import MoviesLayout from "./components/Movieslayout.jsx";
 
 const App = () => {
   return (
@@ -18,23 +20,36 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/movie/:id" element={<MoviePage />} />
         <Route
           path="/main"
           element={
             <>
-              <ProfileIcon />
+             
               <Main />
+              <ProfileIcon />
+              
             </>
           }
         />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
+          path="/movie/:id"
+          element={
+            <>
+              <Sidebar />
+              <ProfileIcon />
+              <MoviePage />
+            </>
+          }
+        />
+        <Route
           path="/setting"
           element={
             <>
+               
               <ProfileIcon />
               <SettingsPage />
+              
             </>
           }
         />
@@ -44,6 +59,18 @@ const App = () => {
             <>
               <ProfileIcon />
               <Adminpage />
+              <Sidebar />
+            </>
+          }
+        />
+
+<Route
+          path="/moviesLayout"
+          element={
+            <>
+              <ProfileIcon />
+              <MoviesLayout />
+              <Sidebar />
             </>
           }
         />

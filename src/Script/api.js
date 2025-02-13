@@ -16,4 +16,13 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+
+export const fetchMovies = (searchQuery) => {
+  const url = `http://localhost:5000/movies/name/${searchQuery}`;
+  console.log('Fetching movies from URL:', url);
+
+  return axios.get(url);
+};
+
+
 export default api;
