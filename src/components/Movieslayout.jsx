@@ -59,7 +59,7 @@ const getRandomMovies = (movies, count) => {
   return shuffled.slice(0, count);
 };
 
-const MainLayout = ({ children }) => {
+const MoviesLayout = ({ children }) => {
   const { movies, loading, error } = useFetchMovies();
 
   if (loading) return <div>Loading...</div>;
@@ -79,8 +79,8 @@ const MainLayout = ({ children }) => {
   );
 };
 
-MainLayout.propTypes = {
+MoviesLayout.propTypes = {
   children: PropTypes.node,
 };
 
-export default MainLayout;
+export default MoviesLayout;

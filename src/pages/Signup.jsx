@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +12,8 @@ const Signup = () => {
     password_hash: "",
     confirmPassword: ""
   });
-  const [error, setError] = useState("");
+
+  const [error, setError] = useState({}); // Error state as an object
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
@@ -36,7 +37,7 @@ const Signup = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    setError("");
+    setError({}); // Reset errors on input change
   };
 
   const validatePassword = (password) => {
@@ -45,24 +46,36 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault(); // Stop form submission
+
+    let newErrors = {};
+    if (!formData.username) newErrors.username = "Username is required!";
+    if (!formData.email) newErrors.email = "Email is required!";
+    if (!formData.password_hash) newErrors.password_hash = "Password is required!";
+    if (!formData.confirmPassword) newErrors.confirmPassword = "Confirm password is required!";
+
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      return;
+    }
 
     if (formData.password_hash !== formData.confirmPassword) {
-      setError("Passwords do not match!");
+      setError({ confirmPassword: "Passwords do not match!" });
       return;
     }
 
     if (!validatePassword(formData.password_hash)) {
-      setError(
-        "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number."
-      );
+      setError({
+        password_hash:
+          "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number."
+      });
       return;
     }
 
     try {
       setIsSubmitting(true);
       console.log("Submitting:", formData);
+
       const response = await api.post("/register", {
         username: formData.username,
         email: formData.email,
@@ -70,8 +83,10 @@ const Signup = () => {
       });
 
       if (response.data.success) {
-        setError("Signup successful! Redirecting to login...");
-        setTimeout(() => navigate("/loginUser"), 2000);
+        setError({ global: "Signup successful! Redirecting to login..." });
+        setTimeout(() => navigate("/"), 2000);
+      } else {
+        setError({ global: "Signup failed. Please try again!" });
       }
     } catch (err) {
       handleApiError(err);
@@ -82,18 +97,18 @@ const Signup = () => {
 
   const handleApiError = (error) => {
     if (!error.response) {
-      setError("Server not responding. Please try again later.");
+      setError({ global: "Server not responding. Please try again later." });
     } else {
       const errorMessage =
         error.response.data.message || "Registration failed. Please try again";
-      setError(errorMessage);
+      setError({ global: errorMessage });
     }
-    setTimeout(() => setError(""), 3000);
+    setTimeout(() => setError({}), 3000);
   };
 
   return (
     <div className="signup-container">
-      {error && <div className="error-message">{error}</div>}
+      {error.global && <div className="error-message">{error.global}</div>}
 
       <div className="form-wrapper">
         <div className="profile">
@@ -107,11 +122,8 @@ const Signup = () => {
         </div>
 
         <form className="signup-form" onSubmit={handleSubmit}>
-          <div
-            className={`input-group ${
-              clickedFields.username || formData.username ? "focused" : ""
-            }`}
-          >
+          {/* Username */}
+          <div className={`input-group ${clickedFields.username || formData.username ? "focused" : ""}`}>
             <FontAwesomeIcon icon={faUser} className="input-icon" />
             <input
               type="text"
@@ -121,17 +133,13 @@ const Signup = () => {
               onChange={handleInputChange}
               onFocus={() => handleFocus("username")}
               onBlur={(e) => handleBlur("username", e.target.value)}
-              required
-              minLength="3"
             />
             <label>Username</label>
+            {error.username && <p className="error-text">{error.username}</p>}
           </div>
 
-          <div
-            className={`input-group ${
-              clickedFields.email || formData.email ? "focused" : ""
-            }`}
-          >
+          {/* Email */}
+          <div className={`input-group ${clickedFields.email || formData.email ? "focused" : ""}`}>
             <FontAwesomeIcon icon={faEnvelope} className="input-icon" />
             <input
               type="email"
@@ -144,15 +152,11 @@ const Signup = () => {
               required
             />
             <label>Email</label>
+            {error.email && <p className="error-text">{error.email}</p>}
           </div>
 
-          <div
-            className={`input-group ${
-              clickedFields.password_hash || formData.password_hash
-                ? "focused"
-                : ""
-            }`}
-          >
+          {/* Password */}
+          <div className={`input-group ${clickedFields.password_hash || formData.password_hash ? "focused" : ""}`}>
             <FontAwesomeIcon icon={faLock} className="input-icon" />
             <input
               type="password"
@@ -166,15 +170,11 @@ const Signup = () => {
               minLength="8"
             />
             <label>Create Password</label>
+            {error.password_hash && <p className="error-text">{error.password_hash}</p>}
           </div>
 
-          <div
-            className={`input-group ${
-              clickedFields.confirmPassword || formData.confirmPassword
-                ? "focused"
-                : ""
-            }`}
-          >
+          {/* Confirm Password */}
+          <div className={`input-group ${clickedFields.confirmPassword || formData.confirmPassword ? "focused" : ""}`}>
             <FontAwesomeIcon icon={faLock} className="input-icon" />
             <input
               type="password"
@@ -188,13 +188,15 @@ const Signup = () => {
               minLength="8"
             />
             <label>Confirm Password</label>
+            {error.confirmPassword && <p className="error-text">{error.confirmPassword}</p>}
           </div>
-          <Link to="/">
+
+          {/* Submit Button */}
           <button type="submit" className="submit-btn" disabled={isSubmitting}>
             {isSubmitting ? <div className="spinner"></div> : "Sign Up"}
-          </button></Link>
-          
+          </button>
 
+          {/* Login Link */}
           <span className="already-user">
             Already have an account? <Link to="/">Log In</Link>
           </span>

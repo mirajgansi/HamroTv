@@ -1,17 +1,15 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Setting.css";
-import api from "../Script/api"; // Make sure this is set up correctly for your API requests
-import ProfilePictureUpload from "./ProfilePictureUpload";
 import { FaCamera, FaEdit } from "react-icons/fa";
-import { ProfilePictureContext } from "./ProfilePictureContext.jsx"; 
+import { ProfilePictureContext } from "./ProfilePictureContext.jsx";
 import { Link } from "react-router-dom";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 
 const SettingsPage = () => {
-  // State for user profile
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState("");
   const [notifications, setNotifications] = useState(false);
@@ -19,121 +17,140 @@ const SettingsPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Access the profile picture state and setter from context
   const { profilePicture, setProfilePicture } = useContext(ProfilePictureContext);
 
-  // Ref for file input
-  const fileInputRef = useRef(null);
+ // SettingsPage.js
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const username = localStorage.getItem('currentUsername');
+      console.log('Phase 1 - Retrieved username:', username);
 
-  // Handle form submission for general settings
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Send email and notifications update to backend
-    const updatedUserData = {
-      name,
-      email,
-      notifications,
-    };
+      if (!username || username === 'undefined') {
+        console.error('No username found in localStorage');
+        setError('No user logged in');
+        return;
+      }
 
-    axios.put("/api/user/settings", updatedUserData) // Adjust the URL based on your backend
-      .then(response => {
-        console.log("Settings saved:", response.data);
-        // You can provide feedback to the user if needed
-      })
-      .catch(error => {
-        console.error("Error saving settings:", error);
-        alert("Failed to save settings");
-      });
-  };
+      console.log('Phase 2 - Making API call for:', username);
+      const response = await axios.get(`http://localhost:5000/users/${username}`);
+      
+      console.log('Phase 3 - API Response:', response.data);
+      if (!response.data?.username) {
+        throw new Error('Invalid user data');
+      }
 
-  // Handle password change
-  const handlePasswordChange = (e) => {
-    e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match!");
-      return;
+      setUser(response.data);
+      setError('');
+    } catch (err) {
+      console.error('Fetch error:', err.message);
+      setError(err.response?.data?.error || 'Failed to load user data');
+    } finally {
+      setLoading(false);
     }
-
-    // Send password change request to backend
-    const passwordData = {
-      currentPassword,
-      newPassword,
-    };
-
-    axios.post("/api/user/change-password", passwordData) // Adjust the URL based on your backend
-      .then(response => {
-        console.log("Password changed:", response.data);
-        // Provide feedback to the user
-      })
-      .catch(error => {
-        console.error("Error changing password:", error);
-        alert("Failed to change password");
-      });
   };
 
-  // Handle profile picture upload
-  const handleSaveProfilePicture = (croppedImage) => {
-    setProfilePicture(croppedImage); // Update the global profile picture state
+  fetchUserData();
+}, []);
 
-    // Send the new profile picture to the backend
-    const formData = new FormData();
-    formData.append("profilePicture", croppedImage); // Append the image file
-    axios.post("/api/user/upload-profile-picture", formData) // Adjust the URL based on your backend
-      .then(response => {
-        console.log("Profile picture updated:", response.data);
-        // Provide feedback to the user if needed
-      })
-      .catch(error => {
-        console.error("Error uploading profile picture:", error);
-        alert("Failed to upload profile picture");
-      });
-  };
-
-  // Handle name editing
   const handleRename = () => {
     if (isEditing) {
-      setName(newName); // Update the name
+      setUser(prev => ({ ...prev, username: newName }));
       setIsEditing(false);
     } else {
-      setNewName(name); // Set the new name input to the current name
+      setNewName(user?.username || "");
       setIsEditing(true);
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!user) return;
+
+    try {
+      await axios.put(`http://localhost:5000/users/${user.id}`, {
+        username: user.username,
+        email: user.email
+      });
+      console.log("Settings saved successfully");
+    } catch (error) {
+      console.error("Save error:", error);
+      alert("Failed to save settings");
+    }
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      alert("Passwords don't match!");
+      return;
+    }
+
+    try {
+      await axios.post(`http://localhost:5000/users/${user.id}/password`, {
+        newPassword
+      });
+      console.log("Password updated");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("Password change error:", error);
+      alert("Failed to change password");
+    }
+  };
+
+  if (loading) {
+    return <div className="loading-spinner">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <h3>Error Loading Data</h3>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Try Again</button>
+      </div>
+    );
+  }
+
   return (
     <div className="settings-container">
-      {/* Profile Section */}
       <div className="profile-section">
         <div className="profile-picture-container">
-          <input
-            id="profile-picture-input"
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            accept="image/*"
+          <input 
+            id="profile-picture-input" 
+            type="file" 
+            style={{ display: "none" }} 
+            accept="image/*" 
           />
-          <ProfilePictureUpload onSave={handleSaveProfilePicture} />
+          <label htmlFor="profile-picture-input">
+            <FaCamera className="camera-icon" />
+            <img 
+              src={profilePicture} 
+              alt="Profile" 
+              className="profile-picture"
+            />
+          </label>
         </div>
         <div className="profile-info">
           {isEditing ? (
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              className="form-control mb-2"
+            <input 
+              type="text" 
+              value={newName} 
+              onChange={(e) => setNewName(e.target.value)} 
+              className="form-control mb-2" 
             />
           ) : (
-            <h2>{name}</h2>
+            <h2>{user?.username}</h2>
           )}
-          <button onClick={handleRename} className="btn btn-outline-primary btn-sm" required>
-            {isEditing ? "Save" : <><FaEdit /> Rename </>}
+          <button onClick={handleRename} className="btn btn-outline-primary btn-sm">
+            {isEditing ? "Save" : <><FaEdit /> Rename</>}
           </button>
         </div>
-        <p>{email}</p>
+        <p>{user?.email}</p>
       </div>
 
-      {/* Preferences Section */}
       <form onSubmit={handleSubmit}>
         <div className="settings-section">
           <h2 className="settings-section-title">Preferences</h2>
@@ -151,57 +168,47 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        {/* Change Password Section */}
         <div className="settings-section">
           <h2 className="settings-section-title">Change Password</h2>
           <div>
             <div className="mb-3">
-              <label htmlFor="currentPassword" className="form-label">
-                Current Password
-              </label>
               <input
                 type="password"
                 className="form-control"
-                id="currentPassword"
+                placeholder="Current Password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                required
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="newPassword" className="form-label">
-                New Password
-              </label>
               <input
                 type="password"
                 className="form-control"
-                id="newPassword"
+                placeholder="New Password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                required
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label">
-                Confirm New Password
-              </label>
               <input
                 type="password"
                 className="form-control"
-                id="confirmPassword"
+                placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                required
               />
             </div>
-            <button type="button" onClick={handlePasswordChange} className="btn btn-secondary">
+            <button 
+              type="button" 
+              onClick={handlePasswordChange} 
+              className="btn btn-secondary"
+            >
               Change Password
             </button>
           </div>
         </div>
 
-        {/* Save Settings Button */}
-        <Link to="/Main">
+        <Link to="/Main" className="d-block mt-4">
           <button type="submit" className="btn btn-primary">
             Save Settings
           </button>

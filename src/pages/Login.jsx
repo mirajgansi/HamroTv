@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [password_hash, setPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -22,18 +22,23 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!email.trim() || !password_hash.trim()) {
+  
+    if (!email.trim() || !password.trim()) {
       setError('Email and password cannot be empty.');
       return;
     }
-
+  
     setIsLoading(true);
     try {
-      const response = await api.post('/users/login', { email, password_hash });
+      const response = await api.post('/users/login', { email, password });
+      
+      // ====== ADD THESE 3 LINES ======
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('currentUsername', response.data.user.username);  // Save username
+      console.log('Stored username:', localStorage.getItem('currentUsername'));  // Debug
+  
       console.log('Login successful:', response.data);
-      navigate('/Main'); // Redirect after login
+      navigate('/Main');
     } catch (err) {
       console.error('Login error:', err.response?.data || err.message);
       setError(err.response?.data?.message || 'Login failed');
@@ -41,7 +46,6 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <div className="container">
       {/* Error Message Display */}
@@ -85,7 +89,7 @@ const Login = () => {
             name="password"
             placeholder=" "
             autoComplete="current-password"
-            value={password_hash}
+            value={password}
             required
             onChange={(e) => {
               setPassword(e.target.value);

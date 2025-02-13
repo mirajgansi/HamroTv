@@ -3,8 +3,8 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: 'http://localhost:5000', 
   headers: {
-    'Content-Type': 'application/json' // Ensure proper content type
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 // Add a request interceptor to include the token in headers (except for login/signup)
@@ -16,13 +16,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-
-export const fetchMovies = (searchQuery) => {
-  const url = `http://localhost:5000/movies/name/${searchQuery}`;
-  console.log('Fetching movies from URL:', url);
-
-  return axios.get(url);
+// Fetch user data by username
+export const getUserByName = async (username) => {
+  return await axios.get(`http://localhost:5000/users/${username}`);
 };
 
+// Fetch movies (Example API call)
+export const fetchMovies = (searchQuery) => {
+  return api.get(`/movies/name/${searchQuery}`);
+};
 
 export default api;

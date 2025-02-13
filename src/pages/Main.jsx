@@ -7,9 +7,7 @@ import ProfileIcon from "../components/ProfileIcon.jsx";
 import "../styles/Main.css";
 
 const Main = ({ toggleSearchBar }) => {
-  
-
-  return (
+    return (
     <div className="app-container">
       {/* Sidebar */}
       <div className="sidebar">

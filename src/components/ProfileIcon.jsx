@@ -1,21 +1,20 @@
 import React, { useContext, useState } from "react";
 import { ProfilePictureContext } from "./ProfilePictureContext.jsx";
 import "../styles/Profile.css"; // Include the CSS file for styling
-import { Link } from "react-router-dom";
+import { Link ,useNavigate } from "react-router-dom";
 
 const ProfileIcon = () => {
   const { profilePicture } = useContext(ProfilePictureContext); // Access the profile picture from context
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-
-  const handleDropdownToggle = () => {
+  const navigate = useNavigate();   const handleDropdownToggle = () => {
     setDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogout = () => {
-    console.log("Logged out");
-    // Add your logout functionality here
+    localStorage.removeItem('token');
+    localStorage.removeItem('currentUsername');
+    navigate('/');
   };
-
   const handleSwitchAccount = () => {
     console.log("Switch account");
     // Add your switch account functionality here
