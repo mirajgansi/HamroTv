@@ -72,13 +72,11 @@
   }
   
   .banner-main {
-    position: relative;
-    display: flex;
     width: 100%;
-    height: 500px;
-    gap: 10px;
-    border-radius: 10px;
-    border-color: #150016;
+    overflow-x: hidden;  /* ✅ Enables horizontal scrolling */
+    white-space: nowrap; /* ✅ Prevents wrapping */
+    scroll-behavior: smooth;
+    padding: 10px 0;
   }
   
   .banner-main img {
@@ -122,19 +120,21 @@
   }
   
   /* Section Styles */
-  .section {
-    margin-bottom: 40px;
-  }
+.new{
   
+}
   .section h2 {
     font-size: 24px;
     margin-bottom: 20px;
   }
-  
+  .carousel-container {
+    margin-bottom: 20px;
+  }
   .carousel {
     display: flex;
     gap: 20px;
-    overflow-x:  scroll;
+    overflow-y:  scroll;
+    overflow-y: hidden;
     padding-bottom: 10px;
   }
   
@@ -157,11 +157,18 @@
   }
   
   .banner-main .movie-card img{
-    width: 500px;
+    width: 1000px;
+    height: 600px;
     object-fit: cover;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   }
-  
+  .section .movie-card img{
+    width: 250px;
+    height: 303px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
   .movie-card img {
     width: 250px;
     border-radius: 10px;

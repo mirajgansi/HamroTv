@@ -118,7 +118,13 @@ input::placeholder {
 .input-group.focused input {
   padding-left: 0rem; /* Adjust padding for the label */
 }
-
+.password-toggle-icon {
+  position: absolute;
+  right: 10px; /* Adjust this value to your preference */
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
 .submit-btn {
   width: 50%;
   padding: 1rem;

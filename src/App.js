@@ -12,7 +12,7 @@ import ProfileIcon from "./components/ProfileIcon.jsx";
 import MoviePage from "./components/MoviePage.jsx";
 import Sidebar from "./components/SideBar.jsx";
 import MoviesLayout from "./components/Movieslayout.jsx";
-
+import AdminLogin from "./pages/AdminLogin.jsx";
 const App = () => {
   return (
     // Wrap the entire app with ProfilePictureProvider
@@ -20,11 +20,11 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<AdminLogin />} />
         <Route
           path="/main"
           element={
             <>
-             
               <Main />
               <ProfileIcon />
               

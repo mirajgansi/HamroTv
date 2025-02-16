@@ -28,22 +28,25 @@ const MoviePage = () => {
   if (error) return <div>Error loading movie</div>;
 
   return (
-    <div className="movie-container">
-      <h1>{movie.movie_name}</h1>
+    <div className="movie-container-youtube">
       <iframe
-        width="800"
-        height="450"
+        width="1100"
+        height="600"
         src={`https://www.youtube.com/embed/${movie.youtube_link.split('v=')[1].split('&')[0]}`}
         title="Movie Trailer"
         frameBorder="0"
         allow="autoplay; encrypted-media"
         allowFullScreen
-      ></iframe>
-      <p>{movie.movie_description}</p>
-        <p>{movie.release_year}</p>
-        <p>{movie.genre}</p>
-        <p>{movie.director}</p>
-        <p>{movie.rating}</p>
+      >
+      </iframe>
+      <div className="Description">
+       <h1>{movie.movie_name}</h1>
+      <p>Description:{movie.movie_description}</p>
+        <p>Release Year:{movie.release_year}</p>
+        <p>Genre:{movie.genre}</p>
+        <p>Directior:{movie.director}</p>
+        <p>Rating: {movie.rating}</p>
+        </div>
     </div>
   );
 };

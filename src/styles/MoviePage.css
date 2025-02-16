@@ -1,17 +1,22 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .movie-page-container {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom,  #150016,#76007C);
+  color: #E3B6B1;
+ 
+}
+
+  .movie-container-youtube {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    background: linear-gradient(to bottom,  #150016,#76007C);
+    align-items: left;
     padding: 20px;
-    background-color: #fff;
+    background-color: transparent;
+   margin-left: 8%;
+   box-sizing: border-box;
+   box-shadow: 0 4px 10px rgb(7, 6, 6);
   }
   
   .movie-header {

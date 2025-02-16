@@ -3,19 +3,20 @@ import React, { useState, useEffect } from "react";
 import "../styles/Login.css";
 import api from "../Script/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faEnvelope, } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faEnvelope,faEye, faEyeSlash,faUserCog} from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (error) {
-      const timer = setTimeout(() => setError(''), 1000); // Clears error after 1 second
+      const timer = setTimeout(() => setError(''), 2000); // Clears error after 1 second
       return () => clearTimeout(timer); // Cleanup function
     }
   }, [error]);
@@ -46,6 +47,30 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevState) => !prevState);
+  };
+
+  const handleAdminClick = () => {
+    const isAdmin = window.confirm("Are you an Admin?");
+    
+    if (isAdmin) {
+      const password = prompt("Enter Admin Passkey:", "");
+
+
+      // Hardcoded admin credentials
+      const adminPassword = "2019";
+
+      if (password === adminPassword) {
+        alert("Welcome Admin!");
+      } else {
+        alert("Incorrect credentials. Please try again.");
+      }
+    }
+  };
+
+
   return (
     <div className="container">
       {/* Error Message Display */}
@@ -77,6 +102,7 @@ const Login = () => {
               setError('');
             }}
           />
+         
           <label htmlFor="email">Email</label>
         </div>
 
@@ -84,7 +110,7 @@ const Login = () => {
             <div className="input-group">
           <FontAwesomeIcon icon={faLock} className="input-login-icon" />
           <input
-            type="password"
+            type={isPasswordVisible ? 'text' : 'password'}
             id="password"
             name="password"
             placeholder=" "
@@ -97,7 +123,14 @@ const Login = () => {
             }}
           />
           <label htmlFor="password">Password</label>
+          <FontAwesomeIcon
+        icon={isPasswordVisible ? faEyeSlash : faEye}
+        className="password-toggle-icon"
+        onClick={togglePasswordVisibility}
+      />
         </div>
+      
+       
         {error && <p className="error-message">{error}</p>}
             
             <button 
@@ -121,10 +154,11 @@ const Login = () => {
               <span>Login with Others</span>
               <span className="line"></span>
             </div>
-            <button type="button" className="google-btn">
-              <img src={require("../icons/google.png")} alt="Google logo" className="google-logo" />
-              Login with Google
-            </button>
+            <Link to="/admin">
+            <button type="button" className="google-btn" onClick={handleAdminClick}>
+            <FontAwesomeIcon icon={faUserCog} alt="Google logo" className="google-logo" />
+              Are you Admin?
+            </button> </Link>
             
             <span className="new-user">
               <Link to="/signup">Create Account</Link>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faEnvelope, faUser,faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import api from "../Script/api";
 import "../styles/SignUp.css";
 
@@ -9,21 +9,29 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password_hash: "",
+    password: "",
     confirmPassword: ""
   });
 
   const [error, setError] = useState({}); // Error state as an object
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
   const [clickedFields, setClickedFields] = useState({
     username: false,
     email: false,
-    password_hash: false,
+    password: false,
     confirmPassword: false
   });
 
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevState) => !prevState);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible((prevState) => !prevState);
+  };
   const handleFocus = (field) => {
     setClickedFields(prev => ({ ...prev, [field]: true }));
   };
@@ -51,7 +59,7 @@ const Signup = () => {
     let newErrors = {};
     if (!formData.username) newErrors.username = "Username is required!";
     if (!formData.email) newErrors.email = "Email is required!";
-    if (!formData.password_hash) newErrors.password_hash = "Password is required!";
+    if (!formData.password) newErrors.password = "Password is required!";
     if (!formData.confirmPassword) newErrors.confirmPassword = "Confirm password is required!";
 
     if (Object.keys(newErrors).length > 0) {
@@ -59,14 +67,14 @@ const Signup = () => {
       return;
     }
 
-    if (formData.password_hash !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       setError({ confirmPassword: "Passwords do not match!" });
       return;
     }
 
-    if (!validatePassword(formData.password_hash)) {
+    if (!validatePassword(formData.password)) {
       setError({
-        password_hash:
+        password:
           "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number."
       });
       return;
@@ -79,7 +87,7 @@ const Signup = () => {
       const response = await api.post("/register", {
         username: formData.username,
         email: formData.email,
-        password_hash: formData.password_hash
+        password: formData.password
       });
 
       if (response.data.success) {
@@ -156,28 +164,34 @@ const Signup = () => {
           </div>
 
           {/* Password */}
-          <div className={`input-group ${clickedFields.password_hash || formData.password_hash ? "focused" : ""}`}>
+          <div className={`input-group ${clickedFields.password || formData.password ? "focused" : ""}`}>
             <FontAwesomeIcon icon={faLock} className="input-icon" />
             <input
-              type="password"
-              name="password_hash"
+                      type={isPasswordVisible ? 'text' : 'password'}
+
+              name="password"
               placeholder=" "
-              value={formData.password_hash}
+              value={formData.password}
               onChange={handleInputChange}
-              onFocus={() => handleFocus("password_hash")}
-              onBlur={(e) => handleBlur("password_hash", e.target.value)}
+              onFocus={() => handleFocus("password")}
+              onBlur={(e) => handleBlur("password", e.target.value)}
               required
               minLength="8"
             />
+            <FontAwesomeIcon
+        icon={isPasswordVisible ? faEyeSlash : faEye}
+        className="password-toggle-icon"
+        onClick={togglePasswordVisibility}
+      />
             <label>Create Password</label>
-            {error.password_hash && <p className="error-text">{error.password_hash}</p>}
+            {error.password && <p className="error-text">{error.password}</p>}
           </div>
 
           {/* Confirm Password */}
           <div className={`input-group ${clickedFields.confirmPassword || formData.confirmPassword ? "focused" : ""}`}>
             <FontAwesomeIcon icon={faLock} className="input-icon" />
             <input
-              type="password"
+               type={isConfirmPasswordVisible ? 'text' : 'password'}
               name="confirmPassword"
               placeholder=" "
               value={formData.confirmPassword}
@@ -187,6 +201,11 @@ const Signup = () => {
               required
               minLength="8"
             />
+            <FontAwesomeIcon
+        icon={isConfirmPasswordVisible ? faEyeSlash : faEye}
+        className="password-toggle-icon"
+        onClick={toggleConfirmPasswordVisibility}
+      />
             <label>Confirm Password</label>
             {error.confirmPassword && <p className="error-text">{error.confirmPassword}</p>}
           </div>

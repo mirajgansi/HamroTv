@@ -50,6 +50,22 @@ const Sidebar = () => {
     navigate(`/movie/${movie_id}`); 
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target) &&
+        !event.target.closest('.sidebar-button') &&
+        isSearchBarVisible
+      ) {
+        setIsSearchBarVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSearchBarVisible]);
+
   return (
     <div className="sidebar">
       <ul className="sidebar-menu">

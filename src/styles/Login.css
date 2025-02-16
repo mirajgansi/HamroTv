@@ -118,7 +118,13 @@ main {
 .input-group input:focus {
   border-color: #29104A;
 }
-
+.password-toggle-icon {
+  position: absolute;
+  right: 10px; /* Adjust this value to your preference */
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
 .input-login-icon{
   position: absolute;
   left: 1rem;

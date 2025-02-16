@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "../styles/HomePage.css";
 import api from "../Script/api";
 
@@ -28,24 +28,27 @@ const useFetchMovies = () => {
 };
 
 const Carousel = ({ movies, title }) => {
-  const navigate = useNavigate(); // ✅ Use navigate for routing
+  const navigate = useNavigate();
 
   const handleMovieClick = (movie_id) => {
-    navigate(`/movie/${movie_id}`); // ✅ Redirect to movie details page
+    navigate(`/movie/${movie_id}`);
   };
 
   return (
-    <div className="section">
-      <h2>{title}</h2>
+    <div className="carousel-container">
+      {title && <h2 className="carousel-title">{title}</h2>}
       <div className="carousel">
         {movies.map((movie) => (
-          <div className="movie-card" key={movie.movie_id} onClick={() => handleMovieClick(movie.movie_id)}>
+          <div
+            className="movie-card"
+            key={movie.movie_id}
+            onClick={() => handleMovieClick(movie.movie_id)}
+          >
             <img
-              src={`http://localhost:5000/${movie.thumbnailupload}`} 
+              src={`http://localhost:5000/${movie.thumbnailupload}`}
               alt={movie.movie_name}
               style={{ cursor: "pointer" }}
             />
-            <p>{movie.movie_name}</p>
           </div>
         ))}
       </div>
@@ -53,28 +56,51 @@ const Carousel = ({ movies, title }) => {
   );
 };
 
-const getRandomMovies = (movies, count) => {
-  if (movies.length <= count) return movies;
-  const shuffled = [...movies].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
-};
-
 const MainLayout = ({ children }) => {
   const { movies, loading, error } = useFetchMovies();
+  const [topRecommendations, setTopRecommendations] = useState([]);
+
+  const getRandomMovies = (movies, count) => {
+    if (movies.length <= count) return [...movies];
+    const shuffled = [...movies];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, count);
+  };
+
+  useEffect(() => {
+    if (movies.length > 0) {
+      setTopRecommendations(getRandomMovies(movies, 6));
+      const interval = setInterval(() => {
+        setTopRecommendations(getRandomMovies(movies, 6));
+      }, 30000); // Corrected interval to 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [movies]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  const topRecommendations = getRandomMovies(movies, 6);
-
   return (
     <div className="app-container">
       <div className="main-content">
-        {/* ✅ Clicking on a movie now redirects to the details page */}
-        {topRecommendations.length > 0 && <Carousel movies={topRecommendations} title="Top Recommendations" />}
-        <Carousel movies={movies} title="New This Week" />
-        <Carousel movies={movies} title="Trending Now" />
-        {children && <div className="extra-content">{children}</div>}
+        <div className="banner-main">
+          {topRecommendations.length > 0 && (
+            <Carousel movies={topRecommendations} />
+          )}
+        </div>
+        <div className="new">
+          <div className="section">
+            <Carousel movies={movies} title="New This Week" />
+          </div>
+          <div className="section">
+            <Carousel movies={movies} title="Trending Now" />
+          </div>
+          {children && <div className="extra-content">{children}</div>}
+        </div>
       </div>
     </div>
   );

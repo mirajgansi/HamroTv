@@ -129,66 +129,135 @@
 }
 
 /* Search Bar Overlay */
-.search-bar-overlay {
-  position: absolute;
-  top: 10%;
-  left: 15%;
-  width: 70%;
-  background: rgba(0, 0, 0, 0.9);
-  border-radius: 8px;
-  padding: 10px;
+/* Updated CSS */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 20px;
 }
 
-.search-bar-container {
-  position: relative;
-  padding: 10px;
-  background: #222;
-  border-radius: 8px;
+
+.search-container {
+  background: rgba(129, 24, 24, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 6px rgba(143, 123, 123, 0.1);
+  animation: slideIn 0.3s ease-out;
+}
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-.recommendations-box {
-  margin-top: 10px;
-  background: #333;
-  padding: 10px;
+.search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px solid #E3B6B1;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #C89B9B;
+  box-shadow: 0 0 8px rgba(232, 193, 193, 0.3);
+}
+
+.search-results {
+  margin-top: 15px;
+  background: white;
   border-radius: 8px;
-  max-height: 300px;
+  max-height: 60vh;
   overflow-y: auto;
 }
 
-.recommendations-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.recommendation-item {
+.search-item {
   display: flex;
   align-items: center;
-  padding: 8px;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease;
+}
+
+.search-item:hover {
+  background: #f8f8f8;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
-.recommendation-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.recommendation-poster {
-  width: 50px;
-  height: 75px;
+.movie-poster {
+  width: 60px;
+  height: 90px;
   object-fit: cover;
   border-radius: 4px;
-  margin-right: 10px;
+  margin-right: 15px;
+}
+
+.placeholder-poster {
+  width: 60px;
+  height: 90px;
+  background: #E3B6B1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 4px;
+  margin-right: 15px;
+}
+
+.movie-details {
+  flex: 1;
 }
 
 .movie-title {
-  color: white;
-  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
 }
 
-/* Closing Animation for Overlay */
-.search-bar-overlay.closing {
-  animation: fadeOut 2s ease forwards; /* Fade-out animation */
+.movie-year {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.search-no-results {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+}
+
+.search-loading {
+  padding: 15px;
+  text-align: center;
+  color: #E3B6B1;
+  font-style: italic;
+}
+
+
+/* Add close button */
+.search-container::after {
+  content: '×';
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.search-container::after:hover {
+  color: #E3B6B1;
 }
 
 @keyframes fadeIn {
