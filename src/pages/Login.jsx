@@ -32,14 +32,21 @@ const Login = () => {
     setIsLoading(true);
     try {
       const response = await api.post('/users/login', { email, password });
-      
-      // ====== ADD THESE 3 LINES ======
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('currentUsername', response.data.user.username);  // Save username
-      console.log('Stored username:', localStorage.getItem('currentUsername'));  // Debug
   
-      console.log('Login successful:', response.data);
-      navigate('/Main');
+      console.log('Full API Response:', response.data); // Debugging response
+  
+      if (response.data && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('currentEmail', email);
+        
+        console.log('Login successful:', response.data);
+
+        
+        navigate('/Main');
+      } else {
+        console.error('Unexpected API response:', response.data);
+        setError(`Unexpected API response. Check server response: ${JSON.stringify(response.data)}`);
+      }
     } catch (err) {
       console.error('Login error:', err.response?.data || err.message);
       setError(err.response?.data?.message || 'Login failed');
@@ -47,7 +54,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-
+  
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
@@ -57,19 +64,16 @@ const Login = () => {
     
     if (isAdmin) {
       const password = prompt("Enter Admin Passkey:", "");
-
-
-      // Hardcoded admin credentials
-      const adminPassword = "2019";
-
+      const adminPassword = "2019"; // Hardcoded, should be secured or moved to environment variables
       if (password === adminPassword) {
         alert("Welcome Admin!");
+        localStorage.setItem('isAdmin', 'true'); // Set admin status in localStorage
+        navigate('/admin'); // Navigate to admin page
       } else {
         alert("Incorrect credentials. Please try again.");
       }
     }
   };
-
 
   return (
     <div className="container">

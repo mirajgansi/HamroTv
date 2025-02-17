@@ -54,55 +54,59 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Stop form submission
-
+    e.preventDefault();
+  
     let newErrors = {};
-    if (!formData.username) newErrors.username = "Username is required!";
-    if (!formData.email) newErrors.email = "Email is required!";
-    if (!formData.password) newErrors.password = "Password is required!";
-    if (!formData.confirmPassword) newErrors.confirmPassword = "Confirm password is required!";
-
+    const username = formData.username.trim();
+    const email = formData.email.trim();
+    const password = formData.password.trim();
+    const confirmPassword = formData.confirmPassword.trim();
+  
+    if (!username) newErrors.username = "Username is required!";
+    if (!email) newErrors.email = "Email is required!";
+    if (!password) newErrors.password = "Password is required!";
+    if (!confirmPassword) newErrors.confirmPassword = "Confirm password is required!";
+  
     if (Object.keys(newErrors).length > 0) {
       setError(newErrors);
       return;
     }
-
-    if (formData.password !== formData.confirmPassword) {
+  
+    if (password !== confirmPassword) {
       setError({ confirmPassword: "Passwords do not match!" });
       return;
     }
-
-    if (!validatePassword(formData.password)) {
+  
+    if (!validatePassword(password)) {
       setError({
-        password:
-          "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number."
+        password: "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number."
       });
       return;
     }
-
+  
     try {
       setIsSubmitting(true);
-      console.log("Submitting:", formData);
-
-      const response = await api.post("/register", {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password
-      });
-
-      if (response.data.success) {
+      
+      const response = await api.post("/users/register", { username, email, password });
+  
+      console.log("API Response:", response.data); // Debugging
+  
+      // ✅ Modify this check based on actual API response
+      if (response.data.success || response.data.message === "Registration successful") {
         setError({ global: "Signup successful! Redirecting to login..." });
-        setTimeout(() => navigate("/"), 2000);
+        navigate('/');
       } else {
-        setError({ global: "Signup failed. Please try again!" });
+        setError({ global: response.data.message || "Signup failed. Please try again!" });
       }
     } catch (err) {
-      handleApiError(err);
+      console.error("Signup Error:", err.response?.data || err.message);
+      setError({ global: err.response?.data?.message || "An error occurred. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
   };
-
+  
+  
   const handleApiError = (error) => {
     if (!error.response) {
       setError({ global: "Server not responding. Please try again later." });

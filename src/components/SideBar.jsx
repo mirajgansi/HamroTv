@@ -64,7 +64,11 @@ const Sidebar = () => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSearchBarVisible]);
+  }, [isSearchBarVisible]);console.log('Sidebar component rendered');
+console.log('Search query:', searchQuery);
+console.log('Recommendations:', recommendations);
+console.log('Is loading:', isLoading);
+console.log('Is search bar visible:', isSearchBarVisible);
 
   return (
     <div className="sidebar">

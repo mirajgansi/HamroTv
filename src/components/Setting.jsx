@@ -4,6 +4,7 @@ import "../styles/Setting.css";
 import { FaCamera, FaEdit } from "react-icons/fa";
 import { ProfilePictureContext } from "./ProfilePictureContext.jsx";
 import { Link } from "react-router-dom";
+import defaultProfile from '../assets/peter.png';
 import axios from "axios";
 
 const SettingsPage = () => {
@@ -17,65 +18,57 @@ const SettingsPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { profilePicture, setProfilePicture } = useContext(ProfilePictureContext);
+  const { profilepicture, setProfilePicture } = useContext(ProfilePictureContext);
 
- // SettingsPage.js
-useEffect(() => {
-  const fetchUserData = async () => {
-    try {
-      const username = localStorage.getItem('currentUsername');
-      console.log('Phase 1 - Retrieved username:', username);
-
-      if (!username || username === 'undefined') {
-        console.error('No username found in localStorage');
-        setError('No user logged in');
-        return;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const username = localStorage.getItem('currentUsername');
+        console.log('Phase 1 - Retrieved username:', username);
+        if (!username || username === 'undefined') {
+          console.error('No username found in localStorage');
+          setError('No user logged in');
+          return;
+        }
+        console.log('Phase 2 - Making API call for:', username);
+        const response = await axios.get(`http://localhost:5000/users/${username}`);
+        
+        console.log('Phase 3 - API Response:', response.data);
+        if (!response.data?.username) {
+          throw new Error('Invalid user data');
+        }
+        setUser(response.data);
+        setError('');
+      } catch (err) {
+        console.error('Fetch error:', err.message);
+        setError(err.response?.data?.error || 'Failed to load user data');
+      } finally {
+        setLoading(false);
       }
-
-      console.log('Phase 2 - Making API call for:', username);
-      const response = await axios.get(`http://localhost:5000/users/${username}`);
-      
-      console.log('Phase 3 - API Response:', response.data);
-      if (!response.data?.username) {
-        throw new Error('Invalid user data');
-      }
-
-      setUser(response.data);
-      setError('');
-    } catch (err) {
-      console.error('Fetch error:', err.message);
-      setError(err.response?.data?.error || 'Failed to load user data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchUserData();
-}, []);
-
-  const handleRename = () => {
+    };
+  
+    fetchUserData();
+  }, []);
+  
+  const handleRename = async () => {
     if (isEditing) {
-      setUser(prev => ({ ...prev, username: newName }));
-      setIsEditing(false);
+      try {
+        const response = await axios.put(`http://localhost:5000/users/${user.id}`, {
+          username: newName,
+          email: user.email
+        });
+        
+        setUser(prev => ({ ...prev, username: newName }));
+        localStorage.setItem('currentUsername', newName);
+        setIsEditing(false);
+        alert('Username updated successfully!');
+      } catch (error) {
+        console.error("Rename error:", error);
+        alert("Failed to update username");
+      }
     } else {
       setNewName(user?.username || "");
       setIsEditing(true);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) return;
-
-    try {
-      await axios.put(`http://localhost:5000/users/${user.id}`, {
-        username: user.username,
-        email: user.email
-      });
-      console.log("Settings saved successfully");
-    } catch (error) {
-      console.error("Save error:", error);
-      alert("Failed to save settings");
     }
   };
 
@@ -87,16 +80,58 @@ useEffect(() => {
     }
 
     try {
-      await axios.post(`http://localhost:5000/users/${user.id}/password`, {
+      await axios.put(`http://localhost:5000/users/${user.id}/password`, {
+        currentPassword,
         newPassword
       });
-      console.log("Password updated");
+      alert("Password updated successfully!");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
       console.error("Password change error:", error);
-      alert("Failed to change password");
+      alert(error.response?.data?.error || "Failed to change password");
+    }
+  };
+
+  const handleProfilePictureUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    try {
+      const formData = new FormData();
+      formData.append('profile', file);
+  
+      const response = await axios.put(
+        `http://localhost:5000/users/${user.id}/profilepicture`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+  
+      setProfilePicture(response.data.profilepicture);  // Set updated picture in context
+      setUser(prev => ({ ...prev, profilepicture: response.data.profilepicture }));
+      alert('Profile picture updated successfully!');
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Failed to upload profile picture");
+    }
+  };
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:5000/users/${user.id}`, {
+        notifications
+      });
+      alert("Preferences saved successfully!");
+    } catch (error) {
+      console.error("Save error:", error);
+      alert("Failed to save preferences");
     }
   };
 
@@ -122,15 +157,20 @@ useEffect(() => {
             id="profile-picture-input" 
             type="file" 
             style={{ display: "none" }} 
-            accept="image/*" 
+            accept="image/*"
+            onChange={handleProfilePictureUpload}
           />
           <label htmlFor="profile-picture-input">
             <FaCamera className="camera-icon" />
-            <img 
-              src={profilePicture} 
-              alt="Profile" 
-              className="profile-picture"
-            />
+            <img
+            src={user?.profilepicture ? `http://localhost:5000/uploads/${user.profilepicture}` : defaultProfile}
+            alt="Profile"
+            className="profile-picture"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = defaultProfile;  // Use default image if the profile picture is not found
+            }}
+          />
           </label>
         </div>
         <div className="profile-info">
@@ -145,7 +185,7 @@ useEffect(() => {
             <h2>{user?.username}</h2>
           )}
           <button onClick={handleRename} className="btn btn-outline-primary btn-sm">
-            {isEditing ? "Save" : <><FaEdit /> Rename</>}
+            {isEditing ? "Save Name" : <><FaEdit /> Rename</>}
           </button>
         </div>
         <p>{user?.email}</p>
@@ -178,6 +218,7 @@ useEffect(() => {
                 placeholder="Current Password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
+                required
               />
             </div>
             <div className="mb-3">
@@ -187,6 +228,8 @@ useEffect(() => {
                 placeholder="New Password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
+                required
+                minLength="6"
               />
             </div>
             <div className="mb-3">
@@ -196,6 +239,8 @@ useEffect(() => {
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength="6"
               />
             </div>
             <button 
@@ -208,11 +253,14 @@ useEffect(() => {
           </div>
         </div>
 
-        <Link to="/Main" className="d-block mt-4">
-          <button type="submit" className="btn btn-primary">
-            Save Settings
+        <div className="mt-4">
+          <button type="submit" className="btn btn-primary me-2">
+            Save Preferences
           </button>
-        </Link>
+          <Link to="/Main" className="btn btn-outline-secondary">
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );
