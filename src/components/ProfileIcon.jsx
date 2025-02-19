@@ -20,13 +20,10 @@ const ProfileIcon = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("currentUsername");
+    localStorage.removeItem("currentEmail");
     navigate("/");
   };
 
-  const handleSwitchAccount = () => {
-    console.log("Switch account");
-  };
 
   const handleSetting = () => {
     console.log("Opening settings...");
@@ -35,22 +32,22 @@ const ProfileIcon = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const username = localStorage.getItem("currentUsername");
-        console.log("Phase 1 - Retrieved username:", username);
+        const email = localStorage.getItem("currentEmail");
+        console.log("Phase 1 - Retrieved username:", email);
 
-        if (!username || username === "undefined") {
+        if (!email || email === "undefined") {
           console.error("No username found in localStorage");
           setError("No user logged in");
           return;
         }
 
-        console.log("Phase 2 - Making API call for:", username);
+        console.log("Phase 2 - Making API call for:", email);
         const response = await axios.get(
-          `http://localhost:5000/users/${username}`
+          `http://localhost:5000/users/email/${email}`
         );
 
         console.log("Phase 3 - API Response:", response.data);
-        if (!response.data?.username) {
+        if (!response.data?.email) {
           throw new Error("Invalid user data");
         }
 

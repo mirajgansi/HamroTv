@@ -9,23 +9,17 @@ const api = axios.create({
 
 // Add a request interceptor to include the token in headers (except for login/signup)
 api.interceptors.request.use((config) => {
-  try {
-    const token = localStorage.getItem('token');
-    const excludedEndpoints = ['/users/login', '/users/register'];
-    
-    if (token && !excludedEndpoints.some(endpoint => config.url.includes(endpoint))) {
-      config.headers.Authorization = `Bearer ${token.replace('Bearer ', '')}`;
-    }
-    return config;
-  } catch (error) {
-    console.error('Interceptor error:', error);
-    return config;
+  const token = localStorage.getItem('token');
+  // Match your actual API endpoints
+  if (token && !config.url.includes('/users/login') && !config.url.includes('/users/register')) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+  return config;
 });
 
 // Fetch user data by username
-export const getUserByName = async (username) => {
-  return await axios.get(`http://localhost:5000/users/${username}`);
+export const getUserByEmail = async (email) => {
+  return api.get(`/users/email/${email}`);
 };
 
 // Fetch movies (Example API call)
@@ -35,18 +29,17 @@ export const fetchMovies = (searchQuery) => {
 
 
 // Update user profile picture
-export const updateUserProfilePicture = async (username, formData) => {
+export const updateUserProfilePicture = async (email, formData) => {
   try {
-    const response = await api.put(`/users/${username}/profilepicture`, formData, {
+    const response = await api.put(`/users/${email}/profilepicture`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',  // Make sure to send it as form data
+        'Content-Type': 'multipart/form-data',  // Make sure to send as form data
       },
     });
-    return response.data;  // Return the updated user data
+    return response.data;
   } catch (error) {
     console.error('Error updating profile picture', error);
     throw error;
   }
 };
-
 export default api;

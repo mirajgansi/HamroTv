@@ -115,7 +115,7 @@ const Signup = () => {
         error.response.data.message || "Registration failed. Please try again";
       setError({ global: errorMessage });
     }
-    setTimeout(() => setError({}), 3000);
+    setTimeout(() => setError({}), 1000);
   };
 
   return (

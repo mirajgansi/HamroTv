@@ -101,12 +101,6 @@ console.log('Is search bar visible:', isSearchBarVisible);
             </button>
           </Link>
         </li>
-        <li>
-          <button className="sidebar-button">
-            <FontAwesomeIcon icon={faBell} className="icon" />
-            <span className="hover-text">Notification</span>
-          </button>
-        </li>
       </ul>
 
       {isSearchBarVisible && (
