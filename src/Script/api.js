@@ -19,7 +19,7 @@ api.interceptors.request.use((config) => {
 
 // Fetch user data by username
 export const getUserByEmail = async (email) => {
-  return api.get(`/users/email/${email}`);
+  return api.get(`/users/email/${encodeURIComponent(email)}`);
 };
 
 // Fetch movies (Example API call)
@@ -28,18 +28,32 @@ export const fetchMovies = (searchQuery) => {
 };
 
 
-// Update user profile picture
-export const updateUserProfilePicture = async (email, formData) => {
+export const updateUser = async (email, updates) => {
+  console.log("Updating user with email:", email);
+  console.log("Payload:", updates);
   try {
-    const response = await api.put(`/users/${email}/profilepicture`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',  // Make sure to send as form data
-      },
-    });
-    return response.data;
+    const response = await api.put(`/users/${encodeURIComponent(email)}/update`, updates);
+    console.log("Response:", response.data);
+    return response;
   } catch (error) {
-    console.error('Error updating profile picture', error);
+    console.error("Update error:", error.response || error);
     throw error;
   }
 };
+
+export const updateProfilePicture = async (email, formData) => {
+  console.log("Updating profile picture for email:", email);
+  console.log("FormData prepared");
+  try {
+    const response = await api.put(`/users/${encodeURIComponent(email)}/update`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    console.log("Response:", response.data);
+    return response;
+  } catch (error) {
+    console.error("Profile upload error:", error.response || error);
+    throw error;
+  }
+};
+
 export default api;
