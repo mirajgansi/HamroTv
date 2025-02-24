@@ -2,13 +2,16 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: transparent;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
+.card{
+  background-color: transparent;
+  box-shadow: 0 4px 10px rgb(255, 255, 255);
+  
+}
 .settings-title {
-  color: #007bff;
+  color: #FFE0E6;
   margin-bottom: 2rem;
   text-align: center;
   font-size: 2rem; /* Added for better visual hierarchy */
@@ -24,7 +27,7 @@
 
 .settings-section-title {
   color: #000000; /* Changed for better contrast */
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem; 
   border-bottom: 2px solid #e9ecef;
   padding-bottom: 0.5rem;
   font-size: 1.5rem; /* Added for better visual hierarchy */
@@ -37,23 +40,22 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: #000000; /* Added for better contrast */
+  background-color: #29104A;
+  border-color: #29104A;
+  color: #FFE0E6; /* Added for better contrast */
   padding: 0.5rem 1rem; /* Added for better button sizing */
   border-radius: 4px; /* Added for consistency */
   transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-secondary {
   background-color: #6c757d;
   border-color: #6c757d;
-  color: #030000; /* Added for better contrast */
+  color: #FFE0E6; /* Added for better contrast */
   padding: 0.5rem 1rem; /* Added for better button sizing */
   border-radius: 4px; /* Added for consistency */
   transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
@@ -91,7 +93,7 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: #007bff;
+  background-color: #FFE0E6;
   color: rgb(94, 45, 45);
   border-radius: 50%;
   padding: 0.75rem; /* Increased from 0.5rem */
@@ -114,7 +116,7 @@
 .profile-info h2 {
   margin-right: 0.5rem;
   margin-bottom: 0;
-  color: #000000; /* Changed for better contrast */
+  color: #FFE0E6; /* Changed for better contrast */
 }
 
 .form-switch .form-check-input {

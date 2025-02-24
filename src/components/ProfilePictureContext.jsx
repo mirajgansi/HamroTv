@@ -13,4 +13,4 @@ export const ProfilePictureProvider = ({ children }) => {
       {children}
     </ProfilePictureContext.Provider>
   );
-};
+};  

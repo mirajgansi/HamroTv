@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faSearch, faFilm, faTv, faBell } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faSearch, faFilm, faTv } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Sidebar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchMovies } from '../Script/api'; // Adjust path if necessary
@@ -86,12 +86,6 @@ console.log('Is search bar visible:', isSearchBarVisible);
               <span className="hover-text">Home</span>
             </button>
           </Link>
-        </li>
-        <li>
-          <button className="sidebar-button">
-            <FontAwesomeIcon icon={faFilm} className="icon" />
-            <span className="hover-text">Series</span>
-          </button>
         </li>
         <li>
           <Link to="/moviesLayout">

@@ -22,7 +22,7 @@ body {
 .form-wrapper {
   background: rgba(255, 255, 255, 0.1);
   box-sizing: border-box;
-  box-shadow: 0 4px 10px rgb(255, 255, 255);
+  
   backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 2rem;
