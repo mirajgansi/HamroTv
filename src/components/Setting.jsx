@@ -152,7 +152,7 @@ const SettingsPage = () => {
                 <img
                   src={profilePicture || peterImage}
                   alt="Profile"
-                  className="profile-picture rounded-circle img-thumbnail"
+                  
                   style={{ 
                     width: "150px", 
                     height: "150px",
