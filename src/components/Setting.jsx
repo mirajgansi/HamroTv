@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Setting.css";
-import { FaCamera, FaEdit } from "react-icons/fa";
+import { FaCamera, FaEdit, FaEye, FaEyeSlash } from "react-icons/fa"; // Added FaEye and FaEyeSlash
 import { ProfilePictureContext } from "./ProfilePictureContext.jsx";
-import defaultProfile from '../assets/peter.png';
+import peterImage from '../assets/peter.png';
 import axios from "axios";
 import { getUserByEmail, updateUser, updateProfilePicture } from "../Script/api";
+
 const SettingsPage = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
@@ -15,6 +16,11 @@ const SettingsPage = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+  // State for password visibility
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { profilePicture, setProfilePicture } = useContext(ProfilePictureContext);
 
@@ -22,36 +28,41 @@ const SettingsPage = () => {
     const fetchUserData = async () => {
       try {
         const email = localStorage.getItem("currentEmail");
+        console.log("Fetching user with email:", email);
         if (!email || email === 'undefined') {
           setError('No user logged in');
           return;
         }
         const response = await axios.get(`http://localhost:5000/users/email/${email}`);
+        console.log("Fetch user response:", response.data);
         if (!response.data?.email) {
           throw new Error('Invalid user data');
         }
         setUser(response.data);
-        setNewName(response.data.username); // Initialize newName with current username
+        setNewName(response.data.username);
+        setProfilePicture(response.data.profilePicture || null);
+        if (response.data.profilePicture) {
+          setProfilePictureUrl(`http://localhost:5000/uploads/${response.data.profilePicture}`);
+        }
         setError('');
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to load user data');
+        console.error("Fetch user error:", err);
       } finally {
         setLoading(false);
       }
     };
-  
     fetchUserData();
   }, []);
-
 
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     console.log("handleSaveChanges triggered");
-  
+
     try {
       const updates = {};
       if (newName && newName !== user.username) updates.username = newName;
-  
+
       if (newPassword || confirmPassword || currentPassword) {
         if (newPassword !== confirmPassword) {
           alert("Passwords don’t match!");
@@ -59,17 +70,17 @@ const SettingsPage = () => {
         }
         if (!currentPassword) {
           alert("Please enter your current password");
-          return;   
+          return;
         }
         updates.currentPassword = currentPassword;
         updates.newPassword = newPassword;
       }
-  
+
       if (Object.keys(updates).length === 0) {
         alert("No changes to save!");
         return;
       }
-  
+
       const response = await updateUser(user.email, updates);
       console.log("Update successful:", response.data);
       setUser(response.data);
@@ -85,29 +96,48 @@ const SettingsPage = () => {
       alert(error.response?.data?.message || "Failed to save changes");
     }
   };
-  
+
   const handleProfilePictureUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-  
-    console.log("handleProfilePictureUpload triggered");
+
+    console.log("Uploading file:", file.name);
     try {
       const formData = new FormData();
-      formData.append("profilepicture", file); // Matches multer field name
-  
+      formData.append("profilepicture", file);
+      formData.append("email", user.email);
+
       const response = await updateProfilePicture(user.email, formData);
-      console.log("Profile update successful:", response.data);
-      setProfilePicture(response.data.profilepicture);
-      setUser(prev => ({ ...prev, profilepicture: response.data.profilepicture }));
+      console.log("Upload response:", response.data);
+      
+      const filename = response.data.profilePicture;
+      const imageUrl = response.data.profilePictureUrl || `http://localhost:5000/uploads/${filename}`;
+      
+      setProfilePicture(filename);
+      setProfilePictureUrl(imageUrl);
+      
+      setUser(prev => {
+        const updatedUser = { 
+          ...prev, 
+          profilePicture: filename
+        };
+        console.log("Updated user state:", updatedUser);
+        console.log("Image URL:", imageUrl);
+        return updatedUser;
+      });
       alert("Profile picture updated!");
+      
+      // Trigger a full page refresh after successful upload
+      window.location.reload();
     } catch (error) {
       console.error("Upload error:", error.response || error);
       alert(error.response?.data?.message || "Upload failed");
     }
   };
-  const handleAccountDelete = async () => {
-    // ... (keep your existing handleAccountDelete function)
-  };
+
+  console.log("Render - user.profilePicture:", user?.profilePicture);
+  console.log("Render - profilePicture from context:", profilePicture);
+  console.log("Render - profilePictureUrl:", profilePictureUrl);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="alert alert-danger m-5">{error}</div>;
@@ -119,34 +149,31 @@ const SettingsPage = () => {
           <form onSubmit={handleSaveChanges}>
             <div className="profile-section text-center mb-5">
               <div className="profile-picture-container mx-auto mb-4">
-                <input
-                  id="profile-picture-input"
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  onChange={handleProfilePictureUpload}
+                <img
+                  src={profilePicture || peterImage}
+                  alt="Profile"
+                  className="profile-picture rounded-circle img-thumbnail"
+                  style={{ 
+                    width: "150px", 
+                    height: "150px",
+                    objectFit: "cover"
+                  }}
+                  onError={(e) => { 
+                    console.log("Image failed to load:", profilePicture);
+                    e.target.src = peterImage; 
+                  }}
                 />
-                <label 
-                  htmlFor="profile-picture-input"
-                  className="position-relative cursor-pointer"
-                >
-                  <FaCamera className="position-absolute bottom-0 end-0 fs-5 bg-primary text-white p-2 rounded-circle" />
-                  <img
-                    src={
-                      user?.profilepicture 
-                        ? `http://localhost:5000/uploads/${user.profilepicture}` 
-                        : defaultProfile
-                    }
-                    alt="Profile"
-                    className="profile-picture rounded-circle img-thumbnail"
-                    style={{ width: "150px", height: "150px" }}
-                    onError={(e) => {
-                      e.target.src = defaultProfile;
-                    }}
+                <label htmlFor="profile-pic-upload" className="btn btn-outline-primary mt-2">
+                  <FaCamera /> Change Profile Picture
+                  <input
+                    id="profile-pic-upload"
+                    type="file"
+                    hidden
+                    accept="image/*"
+                    onChange={handleProfilePictureUpload}
                   />
                 </label>
               </div>
-
               <div className="profile-info">
                 {isEditing ? (
                   <div className="d-flex gap-2 justify-content-center mb-3">
@@ -177,32 +204,59 @@ const SettingsPage = () => {
               <h3 className="mb-4 border-bottom pb-2">Change Password</h3>
               <div className="row g-3">
                 <div className="col-md-6">
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Current Password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                  />
+                  <div className="input-group">
+                    <input
+                      type={showCurrentPassword ? "text" : "password"}
+                      className="form-control"
+                      placeholder="Current Password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    >
+                      {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
                 <div className="col-md-6">
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="New Password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    minLength="6"
-                  />
+                  <div className="input-group">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      className="form-control"
+                      placeholder="New Password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      minLength="6"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
                 <div className="col-md-6">
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Confirm New Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
+                  <div className="input-group">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      className="form-control"
+                      placeholder="Confirm New Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -216,7 +270,7 @@ const SettingsPage = () => {
               </button>
               <button 
                 type="button"
-                onClick={handleAccountDelete} 
+                onClick={() => console.log("Delete account clicked")}
                 className="btn btn-danger"
               >
                 Delete Account

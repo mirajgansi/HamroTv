@@ -2,7 +2,7 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #0d2741;
+  background-color: transparent;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -23,7 +23,7 @@
 }
 
 .settings-section-title {
-  color: #ffffff; /* Changed for better contrast */
+  color: #000000; /* Changed for better contrast */
   margin-bottom: 1.5rem;
   border-bottom: 2px solid #e9ecef;
   padding-bottom: 0.5rem;
@@ -32,14 +32,14 @@
 
 .form-label {
   font-weight: 500;
-  color: #ffffff; /* Changed for better contrast */
+  color: #000000; /* Changed for better contrast */
   margin-bottom: 0.5rem; /* Added for better spacing */
 }
 
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
-  color: #ffffff; /* Added for better contrast */
+  color: #000000; /* Added for better contrast */
   padding: 0.5rem 1rem; /* Added for better button sizing */
   border-radius: 4px; /* Added for consistency */
   transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
@@ -53,7 +53,7 @@
 .btn-secondary {
   background-color: #6c757d;
   border-color: #6c757d;
-  color: #ffffff; /* Added for better contrast */
+  color: #030000; /* Added for better contrast */
   padding: 0.5rem 1rem; /* Added for better button sizing */
   border-radius: 4px; /* Added for consistency */
   transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
@@ -71,6 +71,7 @@
  
 .profile-picture-container {
   position: relative;
+  
   width: 200px; /* Increased from 150px */
   height: 200px; /* Increased from 150px */
   margin: 0 auto 1rem;
@@ -91,7 +92,7 @@
   bottom: 0;
   right: 0;
   background-color: #007bff;
-  color: white;
+  color: rgb(94, 45, 45);
   border-radius: 50%;
   padding: 0.75rem; /* Increased from 0.5rem */
   cursor: pointer;
@@ -100,7 +101,7 @@
 }
 
 .profile-picture-upload:hover {
-  background-color: #0056b3;
+  background-color: transparent;
 }
 
 .profile-info {
@@ -113,7 +114,7 @@
 .profile-info h2 {
   margin-right: 0.5rem;
   margin-bottom: 0;
-  color: #ffffff; /* Changed for better contrast */
+  color: #000000; /* Changed for better contrast */
 }
 
 .form-switch .form-check-input {
