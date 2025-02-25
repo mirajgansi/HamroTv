@@ -1,13 +1,37 @@
 import React, { useState, useEffect, useContext } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../styles/Setting.css";
-import { FaCamera, FaEdit, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaCamera, FaEdit, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa"; // Added FaArrowLeft
 import { ProfilePictureContext } from "./ProfilePictureContext.jsx";
 import peterImage from "../assets/peter.png";
 import axios from "axios";
 import { getUserByEmail, updateUser, updateProfilePicture } from "../Script/api";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import "../styles/Setting.css";
+import { useNavigate } from "react-router-dom"; // Added for navigation
+
+// Custom Modal Component
+const CustomModal = ({ show, onHide, onConfirm, children }) => {
+  if (!show) return null;
+
+  return (
+    <div className="modal-backdrop">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            {/* Empty header as per your latest version */}
+          </div>
+          <div className="modal-body">{children}</div>
+          <div className="modal-footer">
+            <button className="modal-cancel-button" onClick={onHide}>
+              Cancel
+            </button>
+            <button className="modal-delete-button" onClick={onConfirm}>
+              Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const SettingsPage = () => {
   const [user, setUser] = useState(null);
@@ -22,10 +46,11 @@ const SettingsPage = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false); // For delete confirmation modal
-  const [deletePassword, setDeletePassword] = useState(""); // Password for deletion
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
 
   const { profilePicture, setProfilePicture } = useContext(ProfilePictureContext);
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -66,7 +91,7 @@ const SettingsPage = () => {
       if (newName && newName !== user.username) updates.username = newName;
       if (newPassword || confirmPassword || currentPassword) {
         if (newPassword !== confirmPassword) {
-          alert("Passwords don’t match!");
+          alert("Passwords don't match!");
           return;
         }
         if (!currentPassword) {
@@ -125,7 +150,6 @@ const SettingsPage = () => {
   };
 
   const handleAccountDelete = () => {
-    // Show the modal for password confirmation
     setShowDeleteModal(true);
   };
 
@@ -142,7 +166,7 @@ const SettingsPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password: deletePassword }), // Send password to backend
+        body: JSON.stringify({ password: deletePassword }),
       });
 
       if (!response.ok) {
@@ -152,178 +176,167 @@ const SettingsPage = () => {
 
       console.log("Account deleted successfully");
       localStorage.clear();
-      window.location.href = "/"; // Redirect to home page
+      window.location.href = "/";
     } catch (error) {
       console.error("Delete error:", error);
       alert(`Failed to delete account: ${error.message}`);
     } finally {
-      setShowDeleteModal(false); // Close modal
-      setDeletePassword(""); // Clear password input
+      setShowDeleteModal(false);
+      setDeletePassword("");
     }
+  };
+
+  const handleBackToHome = () => {
+    navigate("/Main"); // Navigate to homepage
   };
 
   console.log("Render - user.profilePicture:", user?.profilePicture);
   console.log("Render - profilePicture from context:", profilePicture);
   console.log("Render - profilePictureUrl:", profilePictureUrl);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="alert alert-danger m-5">{error}</div>;
+  if (loading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="settings-container">
-      <div className="card">
-        <div className="card-body">
-          <form onSubmit={handleSaveChanges}>
-            <div className="profile-section text-center mb-5">
-              <div className="profile-picture-container mx-auto mb-4">
-                <img
-                  src={profilePicture || peterImage}
-                  alt="Profile"
-                  style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                  onError={(e) => {
-                    console.log("Image failed to load:", profilePicture);
-                    e.target.src = peterImage;
-                  }}
+      <div className="settings-card">
+        <button className="back-button" onClick={handleBackToHome}>
+          <FaArrowLeft />
+        </button>
+        <form onSubmit={handleSaveChanges}>
+          <div className="profile-section">
+            <div className="profile-picture-container">
+              <img
+                src={profilePicture || peterImage}
+                alt="Profile"
+                className="profile-image"
+                onError={(e) => {
+                  console.log("Image failed to load:", profilePicture);
+                  e.target.src = peterImage;
+                }}
+              />
+              <label htmlFor="profile-pic-upload" className="upload-button">
+                <FaCamera />
+                <input
+                  id="profile-pic-upload"
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={handleProfilePictureUpload}
                 />
-                <label htmlFor="profile-pic-upload" className="btn btn-outline-primary mt-2">
-                  <FaCamera /> Change Profile Picture
+              </label>
+            </div>
+            <div className="profile-info">
+              {isEditing ? (
+                <div className="edit-username-container">
                   <input
-                    id="profile-pic-upload"
-                    type="file"
-                    hidden
-                    accept="image/*"
-                    onChange={handleProfilePictureUpload}
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="username-input"
                   />
-                </label>
-              </div>
-              <div className="profile-info">
-                {isEditing ? (
-                  <div className="d-flex gap-2 justify-content-center mb-3">
-                    <input
-                      type="text"
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      className="form-control w-50"
-                    />
-                  </div>
-                ) : (
-                  <div className="d-flex gap-2 justify-content-center align-items-center mb-3">
-                    <h2 className="mb-0">{user?.username}</h2>
-                    <button
-                      type="button"
-                      onClick={() => setIsEditing(true)}
-                      className="btn btn-outline-primary btn-sm"
-                    >
-                      <FaEdit />
-                    </button>
-                  </div>
-                )}
-                <p className="text-muted">{user?.email}</p>
-              </div>
-            </div>
-
-            <div className="mb-5">
-              <h3 className="mb-4 border-bottom pb-2">Change Password</h3>
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <div className="input-group">
-                    <input
-                      type={showCurrentPassword ? "text" : "password"}
-                      className="form-control"
-                      placeholder="Current Password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    >
-                      {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
-                  </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="input-group">
-                    <input
-                      type={showNewPassword ? "text" : "password"}
-                      className="form-control"
-                      placeholder="New Password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      minLength="6"
-                    />
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                    >
-                      {showNewPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
-                  </div>
+              ) : (
+                <div className="username-display">
+                  <h2>{user?.username}</h2>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    className="edit-button"
+                  >
+                    <FaEdit />
+                  </button>
                 </div>
-                <div className="col-md-6">
-                  <div className="input-group">
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      className="form-control"
-                      placeholder="Confirm New Password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    >
-                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
-                  </div>
-                </div>
-              </div>
+              )}
+              <p className="email">{user?.email}</p>
             </div>
+          </div>
 
-            <div className="mb-5 d-flex justify-content-between">
-              <button type="submit" className="btn btn-primary">
-                Save Changes
-              </button>
-              <button
-                type="button"
-                onClick={handleAccountDelete}
-                className="btn btn-danger"
-              >
-                Delete Account
-              </button>
-            </div>
-          </form>
-
-          {/* Delete Confirmation Modal */}
-          <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Confirm Account Deletion</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+          <div className="password-section">
+            <h3>Change Password</h3>
+            <div className="password-inputs">
               <div className="input-group">
                 <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Enter your current password"
-                  value={deletePassword}
-                  onChange={(e) => setDeletePassword(e.target.value)}
+                  type={showCurrentPassword ? "text" : "password"}
+                  className="form-input"
+                  placeholder="Current Password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                 />
+                <button
+                  type="button"
+                  className="toggle-visibility"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                >
+                  {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                Cancel
-              </Button>
-              <Button variant="danger" onClick={confirmAccountDelete}>
-                Delete Account
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
+              <div className="input-group">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  className="form-input"
+                  placeholder="New Password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  minLength="6"
+                />
+                <button
+                  type="button"
+                  className="toggle-visibility"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                >
+                  {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              <div className="input-group">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  className="form-input"
+                  placeholder="Confirm New Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="toggle-visibility"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="action-buttons">
+            <button type="submit" className="save-button">
+              Save Changes
+            </button>
+            <button
+              type="button"
+              onClick={handleAccountDelete}
+              className="delete-button"
+            >
+              Delete Account
+            </button>
+          </div>
+        </form>
+
+        <CustomModal
+          show={showDeleteModal}
+          onHide={() => setShowDeleteModal(false)}
+          onConfirm={confirmAccountDelete}
+        >
+          <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+          <div className="input-group">
+            <input
+              type="password"
+              className="form-input"
+              placeholder="Enter your current password"
+              value={deletePassword}
+              onChange={(e) => setDeletePassword(e.target.value)}
+            />
+          </div>
+        </CustomModal>
       </div>
     </div>
   );

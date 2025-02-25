@@ -1,142 +1,290 @@
+/* styles/Setting.css */
 .settings-container {
   max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-.card{
-  background-color: transparent;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
   box-shadow: 0 4px 10px rgb(255, 255, 255);
-  
-}
-.settings-title {
-  color: #FFE0E6;
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: 2rem; /* Added for better visual hierarchy */
 }
 
-.settings-section {
-  background-color: #000000;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.settings-section-title {
-  color: #000000; /* Changed for better contrast */
-  margin-bottom: 1.5rem; 
-  border-bottom: 2px solid #e9ecef;
-  padding-bottom: 0.5rem;
-  font-size: 1.5rem; /* Added for better visual hierarchy */
-}
-
-.form-label {
-  font-weight: 500;
-  color: #000000; /* Changed for better contrast */
-  margin-bottom: 0.5rem; /* Added for better spacing */
-}
-
-.btn-primary {
-  background-color: #29104A;
-  border-color: #29104A;
-  color: #FFE0E6; /* Added for better contrast */
-  padding: 0.5rem 1rem; /* Added for better button sizing */
-  border-radius: 4px; /* Added for consistency */
-  transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
-}
-
-.btn-primary:hover {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  color: #FFE0E6; /* Added for better contrast */
-  padding: 0.5rem 1rem; /* Added for better button sizing */
-  border-radius: 4px; /* Added for consistency */
-  transition: background-color 0.3s ease, border-color 0.3s ease; /* Added for smooth transition */
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-  border-color: #545b62;
+.settings-card {
+  background-color:transparent;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 20px;
 }
 
 .profile-section {
   text-align: center;
   margin-bottom: 2rem;
 }
- 
+
 .profile-picture-container {
-  position: relative;
-  
-  width: 200px; /* Increased from 150px */
-  height: 200px; /* Increased from 150px */
+  width: 150px;
+  height: 150px;
   margin: 0 auto 1rem;
+  position: relative;
 }
 
-.profile-picture {
-  width: 10rem; /* Adjusted to fill the container */
-  height: 10rem;
-  padding:80px;
+.profile-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 50%; /* Changed back to 50% for a perfect circle */
-  border: 3px solid #000000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.profile-picture-upload {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: #FFE0E6;
-  color: rgb(94, 45, 45);
   border-radius: 50%;
-  padding: 0.75rem; /* Increased from 0.5rem */
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 1.2rem; /* Optional: Increase icon size */
 }
 
-.profile-picture-upload:hover {
-  background-color: transparent;
+.upload-button {
+  display: inline-block;
+  padding: 6px 12px;
+  
+  border-radius: 4px;
+  color: #FFE0E6;
+  cursor: pointer;
+  margin-top: 0.5rem;
 }
 
 .profile-info {
+  margin-top: 20px;
+}
+
+.edit-username-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.username-input {
+  padding: 6px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 50%;
+}
+
+.username-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.username-display h2 {
+  margin: 0;
+}
+
+.edit-button {
+  padding: 4px 8px;
+  border: 1px solid ;
+  border-radius: 4px;
+  background: none;
+  color: #f5c6cb;
+  cursor: pointer;
+}
+
+.email {
+  color: #e3b6b1;
+  margin: 0;
+}
+
+.password-section {
+  margin-bottom: 2rem;
+}
+
+.password-section h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.password-inputs {
+  display: grid;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-input {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.toggle-visibility {
+  padding: 6px 12px;
+  color: #845162;
+  border: 1px ;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.save-button {
+  padding: 6px 12px;
+  background-color: #29104A;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.save-button:hover {
+  box-shadow: #150016 0 0 20px 1px;
+  background: #29104A !important;
+}
+
+.delete-button {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.delete-button:hover {
+  box-shadow: #150016 0 0 20px 1px;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  margin: 3rem;
+  border-radius: 4px;
+  border: 1px solid #f5c6cb;
+}
+
+.loading {
+  /* Basic styling for loading state */
+  text-align: center;
+  padding: 20px;
+}
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 6px 12px;
+  background: none;
+  border: 1px solid #845162;
+  border-radius: 4px;
+  color: #845162;
+  cursor: pointer;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background-color: #845162;
+  color: white;
+  box-shadow: #150016 0 0 10px 1px;
+}
+
+/* Custom Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker for contrast */
+  display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  align-items: center;
+  z-index: 1000;
 }
 
-.profile-info h2 {
-  margin-right: 0.5rem;
-  margin-bottom: 0;
-  color: #FFE0E6; /* Changed for better contrast */
+.modal-dialog {
+  max-width: 500px;
+  width: 90%;
+  margin: 1.75rem;
 }
 
-.form-switch .form-check-input {
-  width: 3em;
+.modal-content {
+  background-color:#150016  !important;  /* Changed to a pastel pink to match your theme */
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
-@media (max-width: 768px) {
-  .settings-container {
-    padding: 1rem;
-  }
+.modal-content .input-group{
+  border: transparent;
+}
 
-  .settings-section {
-    padding: 1rem;
-  }
+.modal-title {
+  color: #845162; /* Matches toggle-visibility for cohesion */
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+}
 
-  .settings-title {
-    font-size: 1.75rem; /* Adjusted for smaller screens */
-  }
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #845162; /* Themed color */
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
 
-  .settings-section-title {
-    font-size: 1.25rem; /* Adjusted for smaller screens */
-  }
+.modal-close-button:hover {
+  color: #5a3741; /* Darker shade for hover */
+}
+
+.modal-body {
+  padding: 1rem;
+  color: #ffffff;
+}
+
+.modal-body p {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #e3b6b1; /* Themed border */
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.modal-cancel-button {
+  padding: 6px 12px;
+  background-color: #845162; /* Matches toggle-visibility */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-cancel-button:hover {
+  background-color: #5a3741; /* Darker shade for hover */
+}
+
+.modal-delete-button {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-delete-button:hover {
+  background-color: #c82333;
 }
