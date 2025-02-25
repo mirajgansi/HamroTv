@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Routes, Route } from "react-router-dom"; // Keep only Routes and Route imports
 import HomePage from "../components/HomePage.jsx";
-
 import Sidebar from "../components/SideBar.jsx";
-import ProfileIcon from "../components/ProfileIcon.jsx";
 import "../styles/Main.css";
 
 const Main = ({ toggleSearchBar }) => {
@@ -14,10 +12,7 @@ const Main = ({ toggleSearchBar }) => {
         <Sidebar toggleSearchBar={toggleSearchBar} />
       </div>
 
-      {/* Profile Icon */}
-      <div className="profile-icon">
-        <ProfileIcon />
-      </div>
+      
 
       {/* Main Content */}
       <div className="main-content">

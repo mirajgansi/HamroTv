@@ -27,29 +27,56 @@ const useFetchMovies = () => {
   return { movies, loading, error };
 };
 
-const Carousel = ({ movies, title }) => {
+const MovieBanner = ({ movie }) => {
   const navigate = useNavigate();
 
-  const handleMovieClick = (movie_id) => {
-    navigate(`/movie/${movie_id}`);
+  const handleWatchClick = () => {
+    navigate(`/movie/${movie.movie_id}`);
   };
 
+  return (
+    <div className="banner">
+      <img src={`http://localhost:5000/${movie.thumbnailupload}`} alt={movie.movie_name} />
+      <div className="banner-content">
+        <h1>{movie.movie_name}</h1>
+        <p className="rating">★ {movie.rating || "N/A"} HD {movie.year || "2024"}</p>
+        <p className="description">
+        {movie.movie_description || "No description available."}
+        </p>
+        <button className="watch-button" onClick={handleWatchClick}>
+          Watch now
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const MovieCard = ({ movie }) => {
+  const navigate = useNavigate();
+
+  const handleMovieClick = () => {
+    navigate(`/movie/${movie.movie_id}`);
+  };
+
+  return (
+    <div className="movie-card" onClick={handleMovieClick}>
+      <img src={`http://localhost:5000/${movie.thumbnailupload}`} alt={movie.movie_name} />
+      <div className="movie-info">
+        <h3>{movie.movie_name}</h3>
+        <p className="rating">★ {movie.rating || "N/A"} HD {movie.year || "2024"}</p>
+        <button className="watch-button">Watch now</button>
+      </div>
+    </div>
+  );
+};
+
+const Carousel = ({ movies, title }) => {
   return (
     <div className="carousel-container">
       {title && <h2 className="carousel-title">{title}</h2>}
       <div className="carousel">
         {movies.map((movie) => (
-          <div
-            className="movie-card"
-            key={movie.movie_id}
-            onClick={() => handleMovieClick(movie.movie_id)}
-          >
-            <img
-              src={`http://localhost:5000/${movie.thumbnailupload}`}
-              alt={movie.movie_name}
-              style={{ cursor: "pointer" }}
-            />
-          </div>
+          <MovieCard key={movie.movie_id} movie={movie} />
         ))}
       </div>
     </div>
@@ -58,7 +85,12 @@ const Carousel = ({ movies, title }) => {
 
 const MainLayout = ({ children }) => {
   const { movies, loading, error } = useFetchMovies();
-  const [topRecommendations, setTopRecommendations] = useState([]);
+  const [featuredMovie, setFeaturedMovie] = useState(null);
+  const [trendingMovies, setTrendingMovies] = useState([]);
+  const [NewMovie, setNewMovies] = useState([]);
+  const getRandomMovie = (movies) => {
+    return movies[Math.floor(Math.random() * movies.length)];
+  };
 
   const getRandomMovies = (movies, count) => {
     if (movies.length <= count) return [...movies];
@@ -72,10 +104,14 @@ const MainLayout = ({ children }) => {
 
   useEffect(() => {
     if (movies.length > 0) {
-      setTopRecommendations(getRandomMovies(movies, 6));
+      setFeaturedMovie(getRandomMovie(movies));
+      setTrendingMovies(getRandomMovies(movies, 6));
+      setNewMovies(getRandomMovies(movies, 6));
       const interval = setInterval(() => {
-        setTopRecommendations(getRandomMovies(movies, 6));
-      }, 30000); // Corrected interval to 30 seconds
+        setFeaturedMovie(getRandomMovie(movies));
+        setNewMovies(getRandomMovies(movies, 6));
+        setTrendingMovies(getRandomMovies(movies, 6));
+      }, 30000); // Update every 30 seconds
 
       return () => clearInterval(interval);
     }
@@ -87,17 +123,13 @@ const MainLayout = ({ children }) => {
   return (
     <div className="app-container">
       <div className="main-content">
-        <div className="banner-main">
-          {topRecommendations.length > 0 && (
-            <Carousel movies={topRecommendations} />
-          )}
-        </div>
-        <div className="new">
+        {featuredMovie && (
+          <MovieBanner movie={featuredMovie} />
+        )}
+        <div className="sections">
           <div className="section">
-            <Carousel movies={movies} title="New This Week" />
-          </div>
-          <div className="section">
-            <Carousel movies={movies} title="Trending Now" />
+            <Carousel movies={NewMovie} title="New This Week" />
+            <Carousel movies={trendingMovies} title="Trending Now" />
           </div>
           {children && <div className="extra-content">{children}</div>}
         </div>

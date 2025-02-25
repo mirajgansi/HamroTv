@@ -44,6 +44,7 @@ body {
   flex-grow: 1;
   padding: 20px;
   margin-left: 60px;
+  width: 100%;
   margin-top: 20px;
 }
 
@@ -135,6 +136,8 @@ body {
   top: 20px;
   right: 20px;
   z-index: 10;
+  height: 5%;
+  width: 3%;
 }
 
 /* Responsive */

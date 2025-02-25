@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import api from "../Script/api";
-import "../styles/MoviePage.css";
+import "../styles/MoviePage.css"; // Ensure this CSS file matches the styling
 
 const MoviePage = () => {
   const { id } = useParams();
@@ -25,30 +25,37 @@ const MoviePage = () => {
   }, [id]);
 
   if (loading) return <div>Loading movie...</div>;
-  if (error) return <div>Error loading movie</div>;
+  if (error) return <div>Error loading movie: {error.message}</div>;
+
+  // Ensure movie data exists before rendering
+  if (!movie) return <div>Movie not found</div>;
 
   return (
-    <div className="movie-container-youtube">
-      <iframe
-        width="1100"
-        height="600"
-        src={`https://www.youtube.com/embed/${movie.youtube_link.split('v=')[1].split('&')[0]}`}
-        title="Movie Trailer"
-        frameBorder="0"
-        allow="autoplay; encrypted-media"
-        allowFullScreen
-      >
-      </iframe>
-      <div className="Description">
-       <h1>{movie.movie_name}</h1>
-      <p>Description:{movie.movie_description}</p>
-        <p>Release Year:{movie.release_year}</p>
-        <p>Genre:{movie.genre}</p>
-        <p>Directior:{movie.director}</p>
-        <p>Rating: {movie.rating}</p>
-        </div>
+    <div className="movie-container">
+      <div className="video-embed">
+        <iframe
+          width="1100"
+          height="600"
+          src={`https://www.youtube.com/embed/${movie.youtube_link.split('v=')[1].split('&')[0]}`}
+          title={`${movie.movie_name} Trailer`}
+          frameBorder="0"
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        ></iframe>
+      </div>
+      <div className="description">
+  <div className="details">
+    <h1>{movie.movie_name}</h1>
+    <p>Description: {movie.movie_description}</p>
+    <p>Release Year: {movie.release_year}</p>
+    <p>Genre: {movie.genre}</p>
+    <p>Director: {movie.director}</p>
+    <p>Rating: {movie.rating}</p>
+  </div>
+  <img src={`http://localhost:5000/${movie.thumbnailupload}`} alt={`${movie.movie_name} Poster`} />
+</div>
     </div>
   );
 };
 
-export default MoviePage;  // Make sure you're using the default export
+export default MoviePage;

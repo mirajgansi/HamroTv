@@ -1,42 +1,39 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faSearch, faFilm, faTv } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faHome, faTv } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Sidebar.css";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchMovies } from '../Script/api'; // Adjust path if necessary
+import { fetchMovies } from '../Script/api';
 
 const Sidebar = () => {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); 
-  const [recommendations, setRecommendations] = useState([]); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [recommendations, setRecommendations] = useState([]);
   const searchBarRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();  // Add navigate hook here
-  
-  // Toggle search bar visibility
+  const navigate = useNavigate();
+
   const toggleSearchBar = () => {
     setIsSearchBarVisible((prev) => !prev);
     setSearchQuery("");
     setRecommendations([]);
   };
 
-  // Handle input change for search query
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Fetch movie recommendations when search query changes
   useEffect(() => {
     if (searchQuery.length >= 3) {
       setIsLoading(true);
-      console.log(`Searching for movie: ${searchQuery}`);
       fetchMovies(searchQuery)
         .then((res) => {
-          console.log('Fetched movies:', res.data);  // Check the response data
-          setRecommendations(res.data ? [res.data] : []);  // Wrap it in an array if it's an object
+          const movies = Array.isArray(res.data) ? res.data : res.data ? [res.data] : [];
+          setRecommendations(movies);
         })
         .catch((err) => {
-          console.error("Error fetching movies:", err);
+          console.error("Fetch error:", err.response || err);
+          setRecommendations([]);
         })
         .finally(() => setIsLoading(false));
     } else {
@@ -44,10 +41,8 @@ const Sidebar = () => {
     }
   }, [searchQuery]);
 
-  // Handle movie click to navigate to details page
-  
   const handleMovieClick = (movie_id) => {
-    navigate(`/movie/${movie_id}`); 
+    navigate(`/movie/${movie_id}`);
   };
 
   useEffect(() => {
@@ -61,14 +56,12 @@ const Sidebar = () => {
         setIsSearchBarVisible(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSearchBarVisible]);console.log('Sidebar component rendered');
-console.log('Search query:', searchQuery);
-console.log('Recommendations:', recommendations);
-console.log('Is loading:', isLoading);
-console.log('Is search bar visible:', isSearchBarVisible);
+  }, [isSearchBarVisible]);
+
+  // Get the top recommendation (first movie in the recommendations list)
+  const topRecommendation = recommendations[0];
 
   return (
     <div className="sidebar">
@@ -109,30 +102,34 @@ console.log('Is search bar visible:', isSearchBarVisible);
             />
             {isLoading ? (
               <div className="search-loading">Searching...</div>
-            ) : recommendations.length > 0 ? (
-              <ul className="search-results">
-              {recommendations.map((movie) => (
-                <li key={movie.id} className="search-item">
-                  {movie.thumbnailupload ? (
-                    <img 
-                      src={`http://localhost:5000/${movie.thumbnailupload}`} 
-                      alt={movie.name}
-                      className="movie-poster"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleMovieClick(movie.id)}  // Pass the movie's id correctly
-                      onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                  ) : (
-                    <div className="placeholder-poster">No image</div>
-                  )}
-                  <div className="movie-details">
-                    <p className="movie-title">{movie.name}</p>
-                    {movie.year && <p className="movie-year">{movie.year}</p>}
+            ) : topRecommendation ? (
+              <div className="recommendation-section">
+                <h2 className="recommendation-title">Recommendation</h2>
+                <div className="top-recommendation">
+                  <h3>{topRecommendation.name}</h3>
+                  <p>{topRecommendation.name}</p> {/* Repeat for emphasis like in the image */}
+                  <div className="movie-grid">
+                    {recommendations.map((movie) => (
+                      <div
+                        key={movie.movie_id}
+                        className="movie-poster"
+                        onClick={() => handleMovieClick(movie.movie_id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {movie.thumbnailupload ? (
+                          <img
+                            src={`http://localhost:5000/${movie.thumbnailupload}`}
+                            alt={movie.name}
+                            onError={(e) => (e.target.src = "/default-poster.jpg")}
+                          />
+                        ) : (
+                          <div className="placeholder-poster">No image</div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                </li>
-              ))}
-            </ul>
-            
+                </div>
+              </div>
             ) : searchQuery.length > 2 ? (
               <div className="search-no-results">No results found for "{searchQuery}"</div>
             ) : null}

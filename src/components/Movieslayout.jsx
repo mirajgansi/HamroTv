@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
-import "../styles/HomePage.css";
+import { useNavigate } from "react-router-dom";
+import "../styles/MoviesLayout.css"; // Update the import path if needed
 import api from "../Script/api";
 
 const useFetchMovies = () => {
@@ -27,36 +27,25 @@ const useFetchMovies = () => {
   return { movies, loading, error };
 };
 
-const Carousel = ({ movies, title }) => {
-  const navigate = useNavigate(); // ✅ Use navigate for routing
+const MovieCard = ({ movie }) => {
+  const navigate = useNavigate();
 
-  const handleMovieClick = (movie_id) => {
-    navigate(`/movie/${movie_id}`); // ✅ Redirect to movie details page
+  const handleMovieClick = () => {
+    navigate(`/movie/${movie.movie_id}`);
   };
 
   return (
-    <div className="section">
-      <h2>{title}</h2>
-      <div className="carousel">
-        {movies.map((movie) => (
-          <div className="movie-card" key={movie.movie_id} onClick={() => handleMovieClick(movie.movie_id)}>
-            <img
-              src={`http://localhost:5000/${movie.thumbnailupload}`} 
-              alt={movie.movie_name}
-              style={{ cursor: "pointer" }}
-            />
-            <p>{movie.movie_name}</p>
-          </div>
-        ))}
+    
+    <div className="movie-card" onClick={handleMovieClick}>
+    
+      <img src={`http://localhost:5000/${movie.thumbnailupload}`} alt={movie.movie_name} />
+      <div className="movie-info">
+        <h3>{movie.movie_name}</h3>
+        <p className="rating">★ {movie.rating || "N/A"} HD {movie.year || "2024"}</p>
+        <button className="watch-button">Watch now</button>
       </div>
     </div>
   );
-};
-
-const getRandomMovies = (movies, count) => {
-  if (movies.length <= count) return movies;
-  const shuffled = [...movies].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
 };
 
 const MoviesLayout = ({ children }) => {
@@ -65,14 +54,14 @@ const MoviesLayout = ({ children }) => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  const topRecommendations = getRandomMovies(movies, 6);
-
   return (
     <div className="app-container">
       <div className="main-content">
-        {/* ✅ Clicking on a movie now redirects to the details page */}
-        {topRecommendations.length > 0 && <Carousel movies={topRecommendations} title="Movies" />}
-        
+        <div className="movies-grid">
+          {movies.map((movie) => (
+            <MovieCard key={movie.movie_id} movie={movie} />
+          ))}
+        </div>
         {children && <div className="extra-content">{children}</div>}
       </div>
     </div>

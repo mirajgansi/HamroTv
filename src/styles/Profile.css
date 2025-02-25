@@ -5,7 +5,7 @@
   display: inline-block;
   cursor: pointer;
   z-index: 1000; /* Ensure it stays on top */
-
+  
 }
 
 .profile-icon {
